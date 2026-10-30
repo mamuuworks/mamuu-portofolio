@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice">
+  <rect width="800" height="450" fill="#E0E0E0"/>
+  <rect x="90" y="70" width="26" height="26" rx="7" fill="#D4D4D4" transform="rotate(30 103 83)"/>
+  <rect x="240" y="40" width="26" height="26" rx="7" fill="#FFFFFF" transform="rotate(-20 253 53)"/>
+  <rect x="420" y="80" width="26" height="26" rx="7" fill="#8C8C8C" transform="rotate(15 433 93)"/>
+  <rect x="610" y="50" width="26" height="26" rx="7" fill="#BFBFBF" transform="rotate(-35 623 63)"/>
+  <rect x="720" y="120" width="26" height="26" rx="7" fill="#A3A3A3" transform="rotate(20 733 133)"/>
+  <rect x="160" y="180" width="26" height="26" rx="7" fill="#BFBFBF" transform="rotate(-10 173 193)"/>
+  <rect x="520" y="160" width="26" height="26" rx="7" fill="#D4D4D4" transform="rotate(40 533 173)"/>
+  <circle cx="330" cy="130" r="10" fill="#FFFFFF"/>
+  <circle cx="680" cy="200" r="8" fill="#111111"/>
+  <!-- creature 1 -->
+  <ellipse cx="124" cy="392" rx="64" ry="11" fill="#B8B8B8"/>
+  <g transform="translate(52 300) scale(0.92)">
+    <path d="M0 92V56q0-40 39-40t39 40v36m0-36q0-40 39-40t39 40v36" stroke="#A3A3A3" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="63.6" cy="24" r="4.7" fill="#111111"/><circle cx="92.4" cy="24" r="4.7" fill="#111111"/>
+    <circle cx="61" cy="21.5" r="1.6" fill="#FFFFFF"/><circle cx="89.8" cy="21.5" r="1.6" fill="#FFFFFF"/>
+    <path d="M71.5 34.8q6.5 5.8 13 0" stroke="#111111" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+    <circle cx="52.1" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/><circle cx="103.9" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/>
+  </g>
+  <!-- creature 2 -->
+  <ellipse cx="277" cy="400" rx="55" ry="10" fill="#B8B8B8"/>
+  <g transform="translate(216 322) scale(0.78)">
+    <path d="M0 92V56q0-40 39-40t39 40v36m0-36q0-40 39-40t39 40v36" stroke="#D4D4D4" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="63.6" cy="24" r="4.7" fill="#111111"/><circle cx="92.4" cy="24" r="4.7" fill="#111111"/>
+    <circle cx="61" cy="21.5" r="1.6" fill="#FFFFFF"/><circle cx="89.8" cy="21.5" r="1.6" fill="#FFFFFF"/>
+    <path d="M71.5 34.8q6.5 5.8 13 0" stroke="#111111" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+    <circle cx="52.1" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/><circle cx="103.9" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/>
+  </g>
+  <!-- creature 3 -->
+  <ellipse cx="430" cy="390" rx="67" ry="11" fill="#B8B8B8"/>
+  <g transform="translate(356 296) scale(0.95)">
+    <path d="M0 92V56q0-40 39-40t39 40v36m0-36q0-40 39-40t39 40v36" stroke="#8C8C8C" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="63.6" cy="24" r="4.7" fill="#111111"/><circle cx="92.4" cy="24" r="4.7" fill="#111111"/>
+    <circle cx="61" cy="21.5" r="1.6" fill="#FFFFFF"/><circle cx="89.8" cy="21.5" r="1.6" fill="#FFFFFF"/>
+    <path d="M71.5 34.8q6.5 5.8 13 0" stroke="#111111" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+    <circle cx="52.1" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/><circle cx="103.9" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/>
+  </g>
+  <!-- creature 4 -->
+  <ellipse cx="602" cy="398" rx="56" ry="10" fill="#B8B8B8"/>
+  <g transform="translate(540 318) scale(0.8)">
+    <path d="M0 92V56q0-40 39-40t39 40v36m0-36q0-40 39-40t39 40v36" stroke="#BFBFBF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="63.6" cy="24" r="4.7" fill="#111111"/><circle cx="92.4" cy="24" r="4.7" fill="#111111"/>
+    <circle cx="61" cy="21.5" r="1.6" fill="#FFFFFF"/><circle cx="89.8" cy="21.5" r="1.6" fill="#FFFFFF"/>
+    <path d="M71.5 34.8q6.5 5.8 13 0" stroke="#111111" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+    <circle cx="52.1" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/><circle cx="103.9" cy="34.1" r="4.3" fill="rgba(23,23,23,0.14)"/>
+  </g>
+</svg>

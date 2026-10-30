@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Client-requested system face for navigation, menu and About prose. Self-hosted. */
+@font-face {
+  font-family: "VCR OSD Mono"; /* taste-skill-ignore — client-requested system face for nav/menu/about */
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/VCR_OSD_MONO.woff") format("woff");
+}
+
+/* Client-requested display face for the five headline wordmarks (rev 10).
+   Letters + basic punctuation only (no digits), Space Grotesk covers the rest. */
+@font-face {
+  font-family: "Aurix";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/Aurixfree-Regular.otf");
+}
+
+:root {
+  --canvas: #ffffff;
+  --ink: #111111;
+  --mute: #737373;
+  --accent: #525252;
+  --line: #e5e5e5;
+  --surface: #f5f5f5;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-canvas font-text text-ink antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--canvas);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Small caption / navigation lettering (part of the Mamuu brand system) */
+.microlabel {
+  @apply font-text text-[13px] font-medium uppercase tracking-[0.16em];
+}
+
+.page-pad {
+  @apply px-6 md:px-12 lg:px-20;
+}
+
+/* Shared entrance for scroll-triggered content is handled in JSX via Framer Motion. */
+
+/* Rev 7 (client request): the home contact rings bob like water waves.
+   The bob lives on the <li> so the anchor's own hover transform still works. */
+.socials-wave li {
+  animation: wave-bob 2.8s ease-in-out infinite;
+}
+.socials-wave li:nth-child(2) {
+  animation-delay: 0.22s;
+}
+.socials-wave li:nth-child(3) {
+  animation-delay: 0.44s;
+}
+@keyframes wave-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socials-wave li {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
