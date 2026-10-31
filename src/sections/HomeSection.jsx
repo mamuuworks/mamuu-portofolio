@@ -1,6 +1,6 @@
 import { Suspense, lazy } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import ScrambleText from "../components/ScrambleText.jsx";
+import LogoIntro from "../components/LogoIntro.jsx";
 import SocialLinks from "../components/SocialLinks.jsx";
 import { portfolio } from "../data/portfolio.js";
 
@@ -10,9 +10,14 @@ const StarVisual = lazy(() => import("../components/StarVisual.jsx"));
 const EASE = [0.22, 1, 0.36, 1];
 
 /**
- * HOME (rev 7, client request) — a 3D wireframe six-pointed star turns
- * behind the wordmark "MAMUU" (scramble decode), with the contact icons
- * below it: round-bordered, bobbing like water waves.
+ * HOME (rev 20, client request) — the client's SVG logo played as a one-time
+ * Three.js intro (a small circle fades in at the centre and grows only to a
+ * MEDIUM size → asterisk onto the medium disc → the disc swelling directly
+ * into the stardust while the star drifts centre → left → glyphs + the
+ * katakana マムー rising from behind the stardust and sliding right,
+ * Aurix-first type; asterisk on top, burst under it, glyphs at the bottom;
+ * ~1.9 s) inside the h1, sized down per client, with the rev 9 wireframe
+ * star behind it and the wave-bobbing contact icons below.
  */
 export default function HomeSection() {
   const reduced = useReducedMotion();
@@ -27,16 +32,16 @@ export default function HomeSection() {
         <StarVisual reducedMotion={!!reduced} />
       </Suspense>
 
-      <div className="relative z-10 flex flex-col items-center px-6 text-center">
+      <div className="relative z-10 flex w-full flex-col items-center px-6 text-center">
         <motion.h1
-          aria-label="Mamuu, illustrator and character artist"
-          className="select-none font-aurix text-[clamp(3.4rem,13vw,10rem)] leading-none tracking-[-0.03em]"
           initial={{ opacity: 0, y: 34 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: reduced ? 0 : 0.25, duration: 0.9, ease: EASE }}
+          transition={{ delay: reduced ? 0 : 0.15, duration: 0.9, ease: EASE }}
+          className="w-[min(76vw,760px)] select-none"
         >
-          <span aria-hidden="true" className="block">
-            <ScrambleText text="MAMUU" delay={350} duration={900} />
+          <span className="sr-only">Mamuu, illustrator and character artist</span>
+          <span aria-hidden="true" className="block aspect-[1419/855] w-full">
+            <LogoIntro reducedMotion={!!reduced} />
           </span>
         </motion.h1>
 

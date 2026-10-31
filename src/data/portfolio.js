@@ -14,12 +14,12 @@ export const portfolio = {
   biography:
     "I started my career at the age of 16 in the creative industry, exploring illustration, character design, and visual storytelling. My work is inspired by playful forms, expressive characters, and the little details that make each artwork feel alive. I enjoy experimenting with different visual styles while building a personal world through my art.",
 
-  // Placeholder destinations — not real accounts yet.
+  // Real destinations (client, rev 13).
   socialLinks: {
-    x: "https://x.com/yourusername",
-    instagram: "https://www.instagram.com/yourusername/",
-    email: "mailto:hello@example.com",
-    vgen: "https://vgen.co/yourusername",
+    x: "https://x.com/mamsenpai",
+    instagram: "https://www.instagram.com/mamsenpai",
+    email: "mailto:sayhitomamuu@gmail.com",
+    vgen: "https://vgen.co/mamsenpai",
   },
 
   // Mamuu OC portrait. The current file is a generated placeholder

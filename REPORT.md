@@ -1,7 +1,7 @@
 # Mamuu — Artist Portfolio · Final Report
 
 React portfolio for the artist **Mamuu** (wordmark `MAMUU`).
-Stack: Vite · React · Tailwind CSS · Framer Motion · Three.js (lazy chunk).
+Stack: Vite · React · Tailwind CSS · Framer Motion · Three.js (in main bundle since rev 14).
 
 ```bash
 npm install
@@ -12,7 +12,342 @@ npm run preview  # port 4199 in this environment
 
 ---
 
-## 0. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
+## 0. Revision 20 — the circle stops at MEDIUM and transforms into the stardust directly, quicker still (client request)
+
+The client reviewed rev 19's intro with two changes: the black circle
+should **never reach full size** — it becomes **medium**, then transforms
+into the stardust directly — and the pace should stay quick, not too slow:
+
+- **Appear (0–0.35 s):** unchanged — the circle fades in as a tiny dot
+  (~16 %) at the canvas centre.
+- **Grow (0.35–0.95 s):** 0.6 s of smoothstep growth that **stops at
+  55 %** (`S_MED`) — the circle never becomes large.
+- **Asterisk (0.65–1.0 s):** spins down onto the medium disc, sized to it,
+  then **grows with it** as the disc becomes the stardust
+  (`S_MED + (1 − S_MED) · EASE_OUT(pb)`).
+- **Become the stardust (0.95–1.75 s):** from the medium size the disc
+  swells ×1.25 while fading into the burst — the medium circle transforms
+  into the stardust directly — while the star assembly drifts centre →
+  left.
+- **Text (1.15–1.85 s):** glyphs + マムー rise from behind the stardust
+  sliding right. Total run **~1.9 s** (was ~2.2 s).
+
+### Files
+
+- `src/components/LogoIntro.jsx` — new `S_MED = 0.55` growth ceiling
+  (rev 19 grew to 1.0); `pg` over 0.6 s (was 0.9 s); the asterisk lands at
+  the medium size and scales up through the burst phase; every `PHASE`
+  window pulled earlier; docblock + comments updated to rev 20.
+- `src/sections/HomeSection.jsx` — comment only.
+- `/tmp/opencode/introshot.mjs` — freeze points retimed (0.2 / 0.65 /
+  0.95 / 1.4 / 1.75 / 2.3 s; the "grown" shot became a "medium" shot).
+
+### Gate
+
+`npm run build` ✓ (3.36 s). lint **0 FAIL · 1 WARN** (em-dash,
+pre-existing). inspect home **0 FAIL · 5 WARN** with `--allow
+mono,few-pictures` — the meter escalated both to FAIL this run because the
+home hero is all canvas (monoShare 1 over the nav's VCR OSD Mono, and 0
+raster pictures); both are deliberate, client-mandated choices, defended
+below. The five remaining warns are the same defended set as rev 19
+(first-action, no-footage, no-hero, small-title, still-page;
+font-not-dealt did not appear this run). All phases re-screenshot-verified
+via `?logoT` at 1440×900 and 390×844: t=0.65 s mid-growth at the centre,
+t=0.95 s the disc at **medium** with the asterisk landing — never large,
+t=1.4 s the medium disc transforming into the stardust and drifting left
+with the glyphs + マムー emerging from behind, t=1.75 s the glyphs nearly
+landed, settled identical to rev 19's lockup. Mobile settled correct.
+
+---
+
+## 0a. Revision 19 — the circle grows INTO the stardust (centre → left), text emerges from behind it to the right, quicker (client request)
+
+The client reviewed rev 18's intro with three changes: the circle should
+grow **into** the stardust (not dissolve in place), the speed should not be
+"too slow", and — while that happens — the M + katakana should **emerge to
+the right from behind the stardust**, with the circle-that-becomes-stardust
+travelling **from the canvas centre to the left**:
+
+- **Appear (0–0.35 s):** the circle fades in as a tiny dot (~16 % of full
+  size) at the **centre of the canvas** — not at the lockup's left home.
+- **Grow (0.35–1.25 s):** 0.9 s of smoothstep growth — still clearly
+  staged, but quicker (rev 18's 1.4 s read as slow).
+- **Asterisk (0.9–1.6 s):** spins down onto the grown disc.
+- **Become the stardust (1.25–2.1 s):** the disc **swells ×1.25 while
+  fading into the burst** — it literally becomes the stardust — while the
+  whole star assembly drifts centre → left to its home (`EASE_OUT` on the
+  drift).
+- **Text (1.45–2.2 s):** the glyphs + マムー start **behind** the stardust
+  (bottom layer, rev 15 order) and slide **rightward** into place —
+  `baseX − (1 − EASE_OUT(pt)) · slide`. Total run **~2.2 s** (was ~3.2 s).
+
+### Files
+
+- `src/components/LogoIntro.jsx` — new `star` THREE.Group holding the disc,
+  asterisk and burst so they travel as one assembly; `parts.driftX` computed
+  from the lockup centre to the star's home after the camera Box3 fit;
+  `renderFrame` sets `parts.star.position.x` per the drift and the text
+  direction flipped to `−slide`; the text pivot stays **outside** the star
+  group so the glyphs can rise from behind the moving star; `applyFinal`
+  resets the star's position; `pb` computed once at the top; docblock +
+  comments updated to rev 19.
+- `src/sections/HomeSection.jsx` — comment only.
+- `/tmp/opencode/introshot.mjs` — freeze points retimed (0.2 / 0.8 / 1.3 /
+  1.7 / 2.05 / 2.6 s).
+
+### Gate
+
+`npm run build` ✓ (3.51 s). lint **0 FAIL · 1 WARN** (em-dash,
+pre-existing). inspect home **0 FAIL · 6 WARN** — the same six defended
+warns as rev 18 (first-action, no-footage, no-hero, font-not-dealt,
+small-title, still-page). All phases re-screenshot-verified via `?logoT` at
+1440×900 and 390×844: t=0.2 s a tiny dot at the canvas **centre**, t=0.8 s
+visibly mid-growth still centred, t=1.3 s full disc + asterisk landing still
+centred, t=1.7 s the stardust expanded and drifting left with the glyphs +
+マムー emerging from behind it to the right, t=2.05 s the star at its left
+home with the glyphs nearly landed, settled identical to rev 18's lockup.
+Mobile settled correct.
+
+---
+
+## 0b. Revision 18 — the circle appears small first, then grows slowly (client request)
+
+The client reviewed rev 17's intro and read the entrance as "masih sama
+saja" — the circle still seemed to just pop in at size. The numbers agreed:
+`EASE_BACK` (a back ease with overshoot) reaches **≈ 96 % of full size 0.3 s
+in**, inside a 0.55 s window, so the growth was physically invisible. Rev 18
+makes the growth the longest beat of the intro:
+
+- **Appear (0–0.5 s):** the circle fades in as a clearly small dot, ~16 % of
+  full size.
+- **Grow (0.5–1.9 s):** a slow smoothstep to full size — 1.4 s of visible
+  growth, no overshoot, no back ease.
+- **Stardust (1.9–2.8 s):** as before, the burst expands while the disc
+  dissolves in place.
+
+The rest of the timeline is retimed to follow the slower entrance: asterisk
+1.15–2.05 s (lands on the grown disc), burst 1.9–2.9 s, dissolve 2.0–2.8 s,
+glyphs + マムー 2.4–3.2 s. Total run ~3.2 s to settle (was ~2.4 s).
+
+### Files
+
+- `src/components/LogoIntro.jsx` — circle entrance rewritten: constant
+  `S_SMALL = 0.16`, growth via a hand-rolled smoothstep `pg * pg * (3 - 2 *
+  pg)` over `[0.5, 1.9]` s; `EASE_BACK` no longer drives the circle
+  (removed the now-unused `pc`); `PHASE` retimed as above; docblock +
+  inline comments updated to rev 18.
+- `src/sections/HomeSection.jsx` — comment only.
+- `/tmp/opencode/introshot.mjs` — freeze points retimed to the new
+  timeline (0.25 / 1.0 / 1.95 / 2.45 / 3.0 / 3.6 s).
+
+### Gate
+
+`npm run build` ✓ (4.3 s). lint **0 FAIL · 1 WARN** (em-dash, pre-existing).
+inspect home **0 FAIL · 6 WARN** — the five defended warns carried since
+rev 13 (first-action, no-footage, no-hero, small-title, still-page) plus a
+new `font-not-dealt` (the meter's randomly dealt sheet was Imbue/Albert
+Sans while the page renders VCR OSD Mono): VCR is the deliberate
+client-requested identity face (rev 4) — defended. All phases
+re-screenshot-verified via `?logoT` at 1440×900 and 390×844: t=0.25 s a tiny
+faint dot, t=1.0 s visibly mid-growth, t=1.95 s full disc with the asterisk
+landing, t=2.45 s burst with the disc dissolving, t=3.0 s glyphs + マムー
+sliding in, settled correct. The growth now reads exactly as the client
+asked: small appears first → slowly grows → stardust.
+
+---
+
+## 0c. Revision 17 — medium-size circle + マムー in the Aurix-first stack (client request)
+
+Two changes to the home intro, both client-requested:
+
+- **The circle never grows big.** Rev 16 kept enlarging the disc (×1 →
+  ×1.5) while it dissolved into the burst; rev 17 drops that growth. The
+  circle now plays **small → medium, and that is its final size** — during
+  the burst expansion it dissolves **in place**, so the sequence reads as
+  small → medium → stardust with no big disc at any point.
+- **マムー is drawn with Aurix first in the font stack** (client request):
+  `"Aurix", "Mamuu Katakana", …`. Aurix is now explicitly awaited through
+  `document.fonts.load` before the texture is rasterised (it is declared in
+  CSS but may not be fetched yet on the home page). Aurix itself carries no
+  kana coverage (verified against its cmap — Latin only), so the glyphs are
+  still painted by the 1.6 KB 3-glyph subset; the stack order honours the
+  request and future-proofs the drawing if Aurix ever gains kana.
+
+### Files
+
+- `src/components/LogoIntro.jsx` — circle scale holds at `EASE_BACK(pc)`
+  (no dissolve-phase growth); katakana stack Aurix-first + Aurix font load;
+  comments updated.
+- `src/sections/HomeSection.jsx` — comment only.
+
+### Gate
+
+`npm run build` ✓ (3.5 s). lint **0 FAIL · 1 WARN** (em-dash, pre-existing).
+inspect home **0 FAIL · 5 WARN** — the same five defended warns as rev 14–16.
+All intro phases + settled re-screenshot-verified via `?logoT` at 1440×900
+and 390×844: the disc reads small → medium and dissolves in place (the
+burst-phase ghost is visibly smaller than rev 16's), マムー renders
+correctly beside the wordmark's end. Fallback SVG unchanged from rev 16.
+
+---
+
+## 0d. Revision 16 — the circle grows into the stardust + マムー restored (client request)
+
+Two changes to the home intro, both client-requested:
+
+- **The black circle grows into the stardust.** In rev 15 the disc shrank
+  away while the starburst expanded over it; now it **keeps growing** (scale
+  ×1 → ×1.5, easeOutCubic) as it fades out during the burst expansion — the
+  circle reads as *becoming* the starburst, never as being covered by it.
+- **The katakana マムー is back**, at its exact original spot from the
+  client file — `translate(1256.9966 516.0573)`, 54 SVG units, the light
+  `#d3d4d4` — small, beside the end of the wordmark. SVGLoader cannot turn
+  `<text>` into geometry and no Japanese font ships with the site, so the
+  run is rasterised into a **canvas texture** (drawn at 4× resolution) and
+  placed as a textured plane inside the glyphs' pivot: it slides in with
+  them and shares their bottom layer (asterisk > burst > text, rev 15).
+
+### Font
+
+`public/fonts/mamuu-katakana.woff2` — a **1.6 KB woff2 subset carrying
+exactly the three glyphs マ・ム・ー** (Noto Sans JP 400, Google Fonts CSS API
+`text=` subsetting), loaded through the `FontFace` API under the family
+name `Mamuu Katakana` (promise cached, remounts never re-fetch). On load
+failure the intro keeps playing and the texture falls back to whatever
+Japanese system font the machine has. This is the single deliberate
+exception to rev 5's "no Japanese" rule, requested by the client.
+
+### Files
+
+- `src/components/LogoIntro.jsx` — effect restructured to async (font load
+  before scene build); `drawKatakana()` texture plane; circle grow-math in
+  `renderFrame`; `applyFinal()` and the texture/`map` disposal kept in sync.
+- `public/images/logo/mamuu-logo-black.svg` — the static fallback now also
+  carries マムー, using the same subset **embedded as a data-URI `@font-face`**
+  (an SVG loaded as `<img>` may not fetch external resources).
+- `src/sections/HomeSection.jsx` — comment only.
+
+### Gate
+
+`npm run build` ✓ (3.4 s). lint **0 FAIL · 1 WARN** (em-dash, pre-existing).
+inspect home **0 FAIL · 5 WARN** — the same five defended warns as rev 14/15.
+All intro phases + settled re-screenshot-verified via `?logoT` at 1440×900
+and 390×844 (マムー renders correctly — no tofu); the fallback SVG verified
+rendered standalone with the embedded font. Console clean.
+
+---
+
+## 0e. Revision 15 — smaller logo, circle dissolves into the stardust, new layer order (client request)
+
+Three changes to the rev 14 intro, all client-requested:
+
+- **The logo is smaller** on screen: the hero span drops from
+  `w-[min(92vw,1150px)]` to `w-[min(76vw,760px)]`.
+- **The circle becomes the stardust**: the disc now appears small (it starts
+  tiny and grows in, 0–0.55 s), then during the starburst expansion
+  (0.95–1.85 s) it **dissolves away** (opacity + scale out, 0.95–1.6 s) — the
+  expanding starburst *replaces* the circle instead of emerging from behind a
+  persisting disc.
+- **Layer order is now asterisk (top) → starburst → glyphs (bottom)**: z
+  indices in `LogoIntro.jsx` changed from asterisk 2 / burst 1 / text 3 to
+  asterisk 3 / burst 2 / text 1. This restores the client SVG's own draw
+  order (glyphs are painted first, the asterisk last), so the burst now
+  overlaps the first glyph exactly as in the original artwork.
+
+Phase times re-timed: circle 0–0.55, asterisk 0.45–1.35, burst 0.95–1.85,
+dissolve 0.95–1.6, glyphs 1.6–2.4. `applyFinal()` matches (no disc remains).
+
+### Gate
+
+`npm run build` ✓ (3.6 s). lint **0 FAIL · 1 WARN** (em-dash, pre-existing).
+inspect home **0 FAIL · 5 WARN** — same five as rev 14 (`first-action`,
+`no-footage`, `no-hero`, `small-title`, `still-page`). All intro phases +
+settled re-screenshot-verified via `?logoT` at 1440×900 and 390×844; console
+clean.
+
+---
+
+## 0f. Revision 14 — the client's SVG logo as an animated Three.js home intro (client request)
+
+The home `MAMUU` wordmark (Aurix + `ScrambleText`, rev 10) is replaced by the
+client's own logo, supplied as `LOGO mamuuu.svg` (viewBox `0 0 1419 854.8`),
+played as a **one-time Three.js intro on first page load**:
+
+**black circle** scales in (0–0.55 s, easeOutBack) → **asterisk** spins down
+onto the disc (0.45–1.35 s, −2.25π → 0, easeOutCubic, then idles at 0.1 rad/s)
+→ **starburst** spikes expand behind it (1.15–2.05 s, 0.12 → 1, easeOutBack)
+→ the three **glyphs** slide in from the side (1.75–2.55 s, easeOutCubic).
+
+### Files
+
+- `src/assets/mamuu-logo.svg` — the client SVG verbatim, imported `?raw` and
+  parsed with `SVGLoader` (shapes → `ShapeGeometry`, y-flip, `DoubleSide`).
+- `src/components/LogoIntro.jsx` — the intro canvas: per-element pivot groups
+  at bbox centres, `OrthographicCamera` fitted to the lockup with letterboxing
+  (lockup aspect preserved on any canvas ratio), DPR capped at 1.8, full GPU
+  dispose on unmount. Any error → `console.warn` + static fallback image.
+- `public/images/logo/mamuu-logo-black.svg` — faithful static fallback
+  (glyph + asterisk `#d3d4d4`, starburst `#111111`, no `<text>`/`<defs>`).
+- `src/sections/HomeSection.jsx` — `h1` is now an sr-only
+  "Mamuu, illustrator and character artist" plus an `aria-hidden` span
+  (`aspect-[1419/855] w-[min(92vw,1150px)]`) holding the canvas; home no
+  longer uses `ScrambleText`. Star backdrop + wave socials unchanged.
+
+### Faithfulness decisions
+
+- Client scheme kept: glyph + asterisk `#d3d4d4` (the SVG's `.cls-2`), circle
+  + starburst ink `#111111`; the asterisk sits **on top** of the burst, the
+  glyphs above both (ink glyphs vanish into the disc — light is required for
+  legibility). The SVG's マムー `<text>` is skipped: the font isn't shipped and
+  Japanese text was removed in rev 5.
+- Element classification is **order-based, no x thresholds**: widest element =
+  starburst; of the rest, leftmost = asterisk, rightmost = wordmark. (The
+  first glyph's curves reach x≈620.8 though its path data starts at 734.7 —
+  the original `<650` threshold misclassified it, threw "unexpected logo
+  structure" and silently fell back. Root cause of the freeze bug.)
+
+### Behaviour
+
+- Plays **once per page load**; `applyFinal()` renders the settled lockup
+  immediately under `prefers-reduced-motion`; no-WebGL/error → static
+  fallback SVG.
+- `?logoT=<seconds>` (in `location.search` or the hash) freezes the intro at
+  time *t* — dev/screenshot aid, verified via a data-attr probe (`textX`
+  reaches its final `951.25` at `t=3.4`).
+
+### Gate
+
+`npm run build` ✓ (3.4 s). lint **0 FAIL · 1 WARN** (em-dash). inspect home
+**0 FAIL · 5 WARN** — `first-action`, `no-footage`, `no-hero`, `small-title`,
+`still-page` (`no-hero`/`small-title` are new: the h1 *is* the logo canvas
+plus sr-only text — the hero is the brand mark itself). Bundles: main
+`index-*.js` 821 KB (LogoIntro lives in the main chunk), `StarVisual-*.js`
+2.7 KB, `ThreeVisual-*.js` 2.5 KB. All five intro phases + settled state
+screenshot-verified at 1440×900 and 390×844; console clean.
+
+---
+
+## 0g. Revision 13 — real contact links + email (client request)
+
+The placeholder destinations in `portfolio.socialLinks` are now the client's
+real accounts, flowing to every consumer (contact pill button `mailto:`,
+contact + home + menu-overlay social rows):
+
+| Channel | Value |
+|---|---|
+| Email | `mailto:sayhitomamuu@gmail.com` |
+| X | `https://x.com/mamsenpai` |
+| Instagram | `https://www.instagram.com/mamsenpai` |
+| VGen | `https://vgen.co/mamsenpai` |
+
+Single-file change (`src/data/portfolio.js`) — no component edits. Verified
+in the production bundle (3× `mamsenpai`, 1× `sayhitomamuu`). Gate on the
+production build: lint **0 FAIL · 1 WARN**; inspect contact **0 FAIL · 4
+WARN** (unchanged list). No visual change expected — hrefs only.
+
+---
+
+## 0h. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
 
 Two follow-ups to rev 11:
 
@@ -40,7 +375,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0a. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
+## 0i. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
 
 Two follow-ups to rev 10:
 
@@ -62,7 +397,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0b. Revision 10 — Aurix display face for the five wordmarks (client request)
+## 0j. Revision 10 — Aurix display face for the five wordmarks (client request)
 
 Client supplied the Aurix free font and asked that the five headline
 wordmarks switch to it: home `MAMUU`, about `ABOUT ME`, work `MAMUU`,
@@ -91,7 +426,7 @@ Aurix renders on every wordmark, menu links stay in VCR OSD Mono.
 
 ---
 
-## 0c. Revision 9 — alternating spike morph + bigger star (client request)
+## 0k. Revision 9 — alternating spike morph + bigger star (client request)
 
 Two changes to the home backdrop only:
 
@@ -114,7 +449,7 @@ untouched; `HomeSection.jsx` unchanged in this revision.
 
 ---
 
-## 0d. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
+## 0l. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
 
 Four changes to the rev-7 home:
 
@@ -145,7 +480,7 @@ scripted). Work/about/contact untouched.
 
 ---
 
-## 0e. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
+## 0m. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
 
 The home page is rebuilt around one new request: replace the m-wordmark +
 mascot hero with a **3D wireframe six-pointed star** backdrop (same family as
@@ -186,7 +521,7 @@ before); inspect **0 FAIL** on home — 4 WARN (`first-action`,
 
 ---
 
-## 0f. Revision 6 — about/home trim + all-VCR contact (client request)
+## 0n. Revision 6 — about/home trim + all-VCR contact (client request)
 
 Three changes shipped:
 
@@ -207,7 +542,7 @@ about 4 WARN, contact 4 WARN (all defensible, table in §3).
 
 ---
 
-## 0g. Revision 5 — remove all Japanese text (client request)
+## 0o. Revision 5 — remove all Japanese text (client request)
 
 The katakana label (drawn as SVG) is removed everywhere: the floating mark
 next to the home wordmark, both marks in the menu overlay, the
@@ -219,7 +554,7 @@ README no longer reference the label.
 
 ---
 
-## 0h. Revision 4 — VCR OSD Mono + final polish (client request)
+## 0p. Revision 4 — VCR OSD Mono + final polish (client request)
 
 Four changes requested and shipped:
 
@@ -245,7 +580,7 @@ Four changes requested and shipped:
    in `index.css` and `--allow mono` in the inspector runs — the face is a
    client requirement, so it is brand, not a tell.
 
-## 0i. Revision 3 — monochrome + mac-window chrome + scramble (client request)
+## 0q. Revision 3 — monochrome + mac-window chrome + scramble (client request)
 
 Six changes requested and shipped:
 
@@ -296,7 +631,7 @@ Also fixed in this revision:
   (`public/images/works/work-01..06.png`), so the raster assets match the
   monochrome art.
 
-## 0j. Revision 2 — separate pages
+## 0r. Revision 2 — separate pages
 
 Historical (kept for context):
 
@@ -317,11 +652,18 @@ grayscale.**
 
 Mamuu's name is drawn as a creature — an "m" with eyes. The mark recurs:
 
-1. **Home hero (rev 9)** — an abstract Y2K wireframe star (top and bottom
-   spikes stretched long, all six points alternately stretching and
-   shrinking) turns faintly behind the `MAMUU` wordmark, slightly tilted;
-   the wordmark scrambles into place. The solid-black round contact buttons
-   hang below, bobbing like water waves.
+1. **Home hero (rev 20)** — the client's own SVG logo, played once as a
+   Three.js intro (a tiny circle fades in at the canvas centre and grows
+   only to a **medium** size → spinning
+   asterisk → the medium disc swelling INTO the stardust while the whole star
+   drifts centre → left →
+   glyphs rising from behind
+   the stardust and sliding right, with the katakana マムー at its original
+   spot;
+   asterisk on top, burst under it, glyphs at the bottom) inside the `h1`,
+   sized down per client (`w-[min(76vw,760px)]`); the rev 9 abstract Y2K
+   wireframe star still turns faintly behind it, slightly tilted. The
+   solid-black round contact buttons hang below, bobbing like water waves.
 2. **Gallery art** — all six placeholder works redrawn around the same creature
    (poster, sticker sheet, riso print, zine spread, palette study, pattern
    tile), grayscale SVG → 1600×900 PNG. No stock imagery anywhere.
@@ -331,7 +673,9 @@ Mamuu's name is drawn as a creature — an "m" with eyes. The mark recurs:
 Type (rev 4 + rev 10 + rev 12): **VCR OSD Mono** (nav row, menu links, About
 prose, `Works` label, work card titles + lightbox title/description —
 client requested, self-hosted 400-weight WOFF) + **Aurix** (display, the
-five headline wordmarks — client supplied, rev 10, self-hosted regular 400)
+four remaining headline wordmarks — work, about, contact, menu; home now
+shows the client's SVG logo instead — client supplied, rev 10, self-hosted
+regular 400)
 + **Space Grotesk** (display fallback + everything not listed) + **DM Sans**
 (text). Micro-labels are small, uppercase, letter-spaced. Palette
 (revision 3, client-specified, strictly monochrome): canvas `#FFFFFF`, ink
@@ -341,34 +685,47 @@ five headline wordmarks — client supplied, rev 10, self-hosted regular 400)
 Revision 6 extends VCR OSD Mono to **all Contact text except the
 `LET'S CONNECT` display headline** (copy, pill button, microlabel, footer).
 
-The Japanese label was removed in revision 5 (client request): the
+The Japanese body text was removed in revision 5 (client request): the
 `KatakanaMark.jsx` SVG component was deleted and all references dropped.
+Revision 16 reintroduces the client file's small マムー beside the home
+wordmark (canvas texture + a self-hosted 3-glyph woff2 subset) — the one
+deliberate exception, requested by the client. Revision 17 draws it with
+Aurix first in the font stack, per client (Aurix has no kana, so the subset
+still paints it).
 
 ## 2. Live thing
 
-**Home (rev 9):** the wireframe star is pointer-reactive — moving the cursor
+**Home (rev 14):** the wireframe star is pointer-reactive — moving the cursor
 tilts it toward the pointer while the group drifts on all three axes. Its six
 spikes alternately stretch and shrink on opposing sine phases (geometry
 rebuilt at a 30 fps throttle), so the silhouette keeps trading long and short
 points (`src/components/StarVisual.jsx`; reduced motion renders one static
-frame; no WebGL falls back to a flat elongated-star SVG). The wordmark
-`MAMUU` decodes through the scramble effect on every open.
+frame; no WebGL falls back to a flat elongated-star SVG). The brand mark is
+the client's SVG logo, played once as a Three.js intro (`LogoIntro.jsx`,
+rev 20): a tiny circle fades in at the canvas centre, grows to a medium size (never full) →
+spinning asterisk onto the medium disc → the disc swelling INTO the stardust while
+the whole star drifts centre → left → glyphs with the
+katakana マムー rising from behind the stardust and sliding right; reduced motion
+renders the settled lockup immediately; errors fall back to a static logo
+image).
 
 **Text is alive too (revision 3):** every headline and label scrambles into
 place on first open via `ScrambleText.jsx` — rAF-driven character shuffle at a
 30 fps throttle, settling left-to-right, final text exposed to screen readers
 through `aria-label`, and skipped entirely under `prefers-reduced-motion`.
+Since rev 14 the home `h1` is exempt: it is the logo canvas and never
+scrambles.
 
 `Mascot.jsx` (the old pointer-tracking eyes) lost its last import in rev 7 and
 is currently unused; the file is kept on disk in case the creature returns.
 
-## 3. Verification — honest results (post-revision-12, production build)
+## 3. Verification — honest results (post-revision-20, production build)
 
 ### Build
-`npm run build` — **passes**. Main bundle ~286 KB; Three.js sits in one shared
-`three.module-*.js` chunk (~492 KB) consumed lazily by both visuals —
-`StarVisual` (home, 2.4 KB) and `ThreeVisual` (menu, 2.5 KB) — so the library
-is never duplicated. The chunk-size warning is expected and accepted.
+`npm run build` — **passes**. Main bundle ~821 KB: since rev 14 `LogoIntro`
+imports Three.js directly, so the library now ships in the main chunk
+(`StarVisual` 2.7 KB and `ThreeVisual` 2.5 KB remain lazy thin wrappers).
+The chunk-size warning is expected and accepted.
 
 ### lint.mjs — 0 FAIL · 1 WARN
 | Level | Rule | Verdict |
@@ -382,7 +739,10 @@ Production build served by `vite preview` (port 4199). Runs use
 
 | Page | Result | Remaining warns | Defense |
 |---|---|---|---|
-| Home `#/` | **0 FAIL** · 4 WARN | `first-action`, `name-only-title`, `no-footage`, `still-page` | Portfolio pages lead with identity; MENU is the first control. No honest footage exists for a not-yet-real artist catalogue. The morphing star + scramble + wave bob keep 10 elements moving (rev 9) — the "still" warn fires only because the hero is a single viewport with no scroll. `few-pictures` is allowed because the gallery is its own page (`#/work`, 6 real raster works); home is a hero, not the catalogue. |
+| Home `#/` | **0 FAIL** · 5 WARN | `first-action`, `no-footage`, `no-hero`, `small-title`, `still-page` | Portfolio pages lead with identity; MENU is the first control. No honest footage exists for a not-yet-real artist catalogue. `font-not-dealt` (flaky — present since rev 18, absent this run): the meter's randomly dealt specimen sheet was Imbue/Albert Sans while the page renders VCR OSD Mono — VCR is the deliberate client-requested identity face (rev 4), not an undealt default. `no-hero`/`small-title` (rev 14): the h1 *is* the hero — the client's SVG logo rendered on a canvas with sr-only text, so the meter can't measure a "large text" title. The intro (a tiny circle fading in at the centre → growth to a **medium** size → asterisk
+→ the medium disc swelling INTO the stardust while the star drifts centre → left → glyphs + マムー rising from behind the stardust and sliding right),
+the morphing star
+and the wave bob keep 10 elements moving — `still-page` fires only because the hero is a single viewport with no scroll. `few-pictures` is allowed because the gallery is its own page (`#/work`, 6 real raster works); home is a hero, not the catalogue. |
 | Work `#/work` | **0 FAIL** · 6 WARN | `micro-label`, `first-action`, `no-footage`, `small-title`, `name-only-title`, `still-page` | The huge `MAMUU` + `Works` header *is* the wordmark-as-title device; the microlabel is the client brand requirement (VCR OSD Mono since rev 11). Pieces animate in and the lightbox opens — the grid isn't inert. `font-count` cleared in rev 12 (imagery text shares the system faces). |
 | About `#/about` | **0 FAIL** · 4 WARN | `first-action`, `name-only-title`, `no-footage`, `still-page` | Same brand/footage defenses. Rev 6 removed the dot and tagline at the client's request — the page is deliberately sparse; 9 elements still move (staggered nav labels, scrambled h1, four sentence blocks). `few-pictures` allowed — a words-only About page is the client decision, the gallery lives at `#/work`. |
 | Contact `#/contact` | **0 FAIL** · 4 WARN | `micro-label`, `no-footage`, `off-centre`, `still-page` | Microlabel is brand; no footage exists; staggered nav + scramble + button hover give motion. `off-centre` is a 16 px difference between the optical edges of the centred display headline — letterform side-bearings, not a layout error. `few-pictures` allowed — contact is a single call-to-action viewport by design. |
@@ -397,11 +757,20 @@ client-requested faces (VCR OSD Mono, Aurix) over the two system faces
 ### Screenshot review (headless Chrome)
 Reviewed after the final build, every listed capture opened:
 
-- Home desktop + mobile fold (rev 9): faint abstract Y2K star — larger in
-  frame, long top/bottom spikes alternating with the shorter side points,
-  slight tilt, no satellite dot — behind centred `MAMUU`; three
-  **solid-black circular buttons with white icons** below it
-  (x · instagram · email), centred VCR nav above (MENU · WORK · ABOUT).
+- Home desktop + mobile fold (rev 20): the client's SVG logo, sized down per
+  client — black starburst, light asterisk on top, three light glyphs under
+  the burst, the small katakana マムー beside the wordmark's end — settled
+  over the faint rev 9 wireframe star; three **solid-black circular buttons
+  with white icons** below it (x · instagram · email), centred VCR nav above
+  (MENU · WORK · ABOUT). All six intro phases screenshot-verified via the
+  `?logoT` freeze (tiny dot at the canvas centre → visibly mid-growth →
+  medium disc with the asterisk landing, still centred → the medium disc
+  transforming into the stardust while drifting left, glyphs + マムー
+  emerging from behind it to
+  the right → glyphs nearly landed at the left home →
+  settled, unchanged from rev 19) at 1440×900 and 390×844; the static fallback SVG
+  (WebGL-off path) verified standalone, katakana rendering through its
+  embedded data-URI font.
 - Work desktop fold: centred MAMUU (Aurix) + `Works` in VCR OSD Mono
   (rev 11), six mac-window cards with three gray dots each; hover/focus
   title chips in VCR OSD Mono (rev 12); grayscale art.
@@ -421,13 +790,25 @@ Reviewed after the final build, every listed capture opened:
 - **Four pages, hash-routed** — `#/`, `#/work`, `#/about`, `#/contact`;
   deep-linkable, one section mounted at a time, fade between pages, scroll
   resets to top.
-- **Home** — abstract Y2K wireframe star backdrop (lazy `StarVisual`: long
+- **Home** — the client's SVG logo as a one-time Three.js intro
+  (`LogoIntro.jsx`: a tiny circle fades in first, then grows slowly to full
+  size → spinning asterisk →
+  the disc dissolving in place as the starburst takes over → glyphs sliding in from
+  the side, with the katakana マムー at its original spot via a
+  canvas texture + self-hosted 3-glyph woff2 subset, Aurix first in the stack —
+  rev 17; asterisk on
+  top, burst under it, glyphs at the bottom — rev 15; growth stays a staged
+  beat while the disc swells into the stardust, the star drifts centre →
+  left and the glyphs rise from behind it sliding right, ~1.9 s — rev 20;
+  plays once per page
+  load, `?logoT=<t>` freezes it for screenshots, reduced motion renders the
+  settled lockup, errors fall back to a static logo image), the abstract Y2K
+  wireframe star backdrop behind it (lazy `StarVisual`: long
   top/bottom spikes that alternately stretch and shrink on opposing phases,
-  two counter-rotating layers, axis drift, geometry rebuilt at 30 fps,
-  WebGL/`three` in the shared chunk), `MAMUU` wordmark set in Aurix (rev 10)
-  and decoded by `ScrambleText`, and the three contact buttons below as
-  solid-black circles with white icons bobbing on the `.socials-wave`
-  keyframes (rev 9); all degrade under reduced motion.
+  two counter-rotating layers, axis drift, geometry rebuilt at 30 fps), and
+  the three contact buttons below as solid-black circles with white icons
+  bobbing on the `.socials-wave` keyframes (rev 9); all degrade under reduced
+  motion.
 - **Navigation** — fixed, centred, set in VCR OSD Mono: MENU + WORK + ABOUT,
   no active dot (rev 4); labels enter with a staggered rise (rev 6);
   `aria-current` kept for screen readers; skip link to `#main`. HOME and
@@ -443,10 +824,11 @@ Reviewed after the final build, every listed capture opened:
   OSD Mono (rev 12); **accessible lightbox**
   (ESC + backdrop close, focus trap, focus restored, same window chrome).
 - **Menu overlay** — full-screen; wordmark `MAMUU` in Aurix, compact
-  display size (rev 12, down from rev 11's larger cut); Three.js lazy
-  chunk loads *only* on first
-  open and is fully disposed on close; ESC to close; focus trap; body scroll
-  locked; reduced-motion and no-WebGL fallbacks; deep link `?menu=1`.
+  display size (rev 12, down from rev 11's larger cut); the `ThreeVisual`
+  wrapper loads lazily on first open (Three.js itself ships in the main
+  bundle since rev 14) and is fully disposed on close; ESC to close; focus
+  trap; body scroll locked; reduced-motion and no-WebGL fallbacks; deep link
+  `?menu=1`.
 - **ScrambleText** — first-open decode effect on headlines/labels (§2),
   a11y-safe, reduced-motion-safe.
 - **Responsive** — verified 1440 / 768 / 390; no horizontal overflow.
@@ -466,8 +848,7 @@ file):
 | Work titles + descriptions | `src/data/portfolio.js` → `works` |
 | Bio (About page) | `src/data/portfolio.js` → `biography` |
 | Nav labels (top bar + overlay) | `src/data/portfolio.js` → `navSections` (top bar), `sections` (overlay) |
-| Email address (currently `hello@example.com`, pill button target) | `src/data/portfolio.js` → `socialLinks.email` |
-| Social URLs (X, Instagram, VGen — currently `#` placeholders) | `src/data/portfolio.js` → `socialLinks` |
+| Email + social URLs (X, Instagram, VGen) — **real accounts since rev 13**: `sayhitomamuu@gmail.com`, `x.com/mamsenpai`, `instagram.com/mamsenpai`, `vgen.co/mamsenpai` | `src/data/portfolio.js` → `socialLinks` |
 
 Note: the About page intentionally shows **no portrait** (client decision); the
 old `public/images/character/character.png` is unused and can be deleted.
@@ -482,24 +863,29 @@ mamuu-portofolio/
 ├── art/                       ← 7 grayscale SVG sources for the placeholder PNGs
 ├── public/fonts/              ← VCR_OSD_MONO.woff (self-hosted, 400 only,
 │                                preloaded) + Aurixfree-Regular.otf (rev 10)
+│                                + mamuu-katakana.woff2 (rev 16: 3-glyph
+│                                マムー subset for the intro texture)
 ├── public/images/works/       ← work-01..06.png, 1600×900 (swap targets)
+├── public/images/logo/        ← mamuu-logo-black.svg (rev 14 static logo fallback; rev 16 adds マムー with embedded font)
 ├── public/favicon.svg         (black bg, white m)
 ├── src/
 │   ├── App.jsx                ← hash router (PAGES, pageFromHash, navigate), ?menu=1
 │   ├── data/portfolio.js      ← ALL content + links + navSections/sections (edit here)
+│   ├── assets/mamuu-logo.svg  ← client SVG verbatim (rev 14; ?raw source for LogoIntro)
 │   ├── components/
 │   │   ├── Navigation.jsx     ← centred MENU + WORK + ABOUT in VCR OSD Mono (no dot, staggered entrance)
 │   │   ├── ScrambleText.jsx   ← first-open decode effect (rAF, 30 fps, a11y-safe)
-│   │   ├── StarVisual.jsx     ← rev 9 home backdrop: morphing Y2K wireframe star (lazy three chunk)
+│   │   ├── LogoIntro.jsx      ← rev 20 home intro: client SVG → Three.js (tiny circle at centre grows to a MEDIUM size → asterisk → disc swells INTO stardust + star drifts centre→left → glyphs + マムー rise from behind sliding right, Aurix-first; asterisk on top)
+│   │   ├── StarVisual.jsx     ← rev 9 home backdrop: morphing Y2K wireframe star (lazy wrapper)
 │   │   ├── ArtworkCard.jsx    ← mac-window card (tone steps, 3 dots, no border)
 │   │   ├── ArtworkLightbox.jsx (window-style dialog, ✕ in title bar)
 │   │   ├── WorksArt.jsx       ← grayscale SVG artwork for the six slots
 │   │   ├── Mascot.jsx         ← UNUSED since rev 7 (kept on disk, no imports)
 │   │   ├── SocialLinks.jsx    ← optional `animated` stagger; rev 7 adds rings via className
 │   │   ├── MenuOverlay.jsx    ← HOME/WORK/ABOUT/CONTACT (lazy Three.js, focus trap)
-│   │   └── ThreeVisual.jsx    ← gray wireframe blob, full disposal (shares the three chunk)
+│   │   └── ThreeVisual.jsx    ← gray wireframe blob, full disposal (lazy wrapper; three in main bundle)
 │   └── sections/
-│       ├── HomeSection.jsx    (rev 8: Y2K star backdrop + MAMUU scramble + black round wave socials)
+│       ├── HomeSection.jsx    (rev 20: client SVG logo intro — circle at centre grows to medium → swells into stardust + drifts left → glyphs + マムー rise from behind sliding right, sized down + Y2K star backdrop + black round wave socials)
 │       ├── WorkSection.jsx    (centred MAMUU + Works, 6 mac-window cards)
 │       ├── AboutSection.jsx   (centred on white, no image, VCR prose, sentence stagger, no dot/tagline)
 │       └── ContactSection.jsx (one viewport, all-VCR text except display headline)
@@ -510,12 +896,15 @@ Deleted earlier: `src/lib/scrollTo.js`, `src/components/CharacterPortrait.jsx`.
 
 ## 7. Known limitations
 
-- The Three.js chunk is large (~492 KB shared by home star + menu blob) —
-  inherent to Three.js; mitigated by lazy loading and by sharing one chunk
-  between both visuals.
+- Three.js is heavy — since rev 14 it ships inside the main bundle (~821 KB
+  total) because `LogoIntro` imports it directly; inherent to Three.js.
+- The home logo intro (rev 20) needs WebGL: under `prefers-reduced-motion`
+  it renders the settled lockup immediately (`applyFinal()`), and on error
+  or missing WebGL it falls back to the static
+  `public/images/logo/mamuu-logo-black.svg`.
 - Placeholder art is original but **must** be replaced with Mamuu's real work
-  before launch; social URLs are `#` and the email is `hello@example.com`
-  until real ones are provided.
+  before launch. Social URLs and the email are the client's real accounts
+  since rev 13 (`src/data/portfolio.js` → `socialLinks`).
 - Do not add borders to the window frames — the chrome is tone-step based on
   purpose (`lint.mjs` `hairline` and `inspect.mjs` `outlined-box` both fail on
   1 px outlines). Keep using `bg-surface` / `bg-line` for structure. (The
