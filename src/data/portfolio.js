@@ -4,15 +4,15 @@
 // ─────────────────────────────────────────────────────────────
 
 export const portfolio = {
-  projectName: "mamuu-portofolio",
+  projectName: "mamuu-work",
   artistName: "Mamuu",
   wordmark: "MAMUU",
   websiteTitle: "Mamuu — Artist Portfolio",
   characterName: "Mamuu OC",
 
-  // TEMPORARY biography — replace with verified copy.
+  // Client biography (rev 28, client-supplied copy).
   biography:
-    "I started my career at the age of 16 in the creative industry, exploring illustration, character design, and visual storytelling. My work is inspired by playful forms, expressive characters, and the little details that make each artwork feel alive. I enjoy experimenting with different visual styles while building a personal world through my art.",
+    "I started my career since the age of 15 in the creative industry, specializing in music videos, motion graphics, visualizers, and live event visuals (BGAs/visualizers), beginning with Indonesian government projects before expanding into creative visual production for international clients. Currently, I am focusing on creating event visuals on a national and international scale, as well as producing music videos for indie and international Virtual YouTubers (VTubers).",
 
   // Real destinations (client, rev 13).
   socialLinks: {

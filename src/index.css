@@ -21,6 +21,13 @@
   src: url("/fonts/Aurixfree-Regular.otf");
 }
 
+/* rev 29, client request: every VCR OSD Mono string reads UPPERCASE. */
+@layer utilities {
+  .font-vcr {
+    text-transform: uppercase;
+  }
+}
+
 :root {
   --canvas: #ffffff;
   --ink: #111111;

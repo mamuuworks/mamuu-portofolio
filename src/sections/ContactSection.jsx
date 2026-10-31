@@ -20,7 +20,8 @@ export default function ContactSection() {
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <motion.h1
           id="contact-title"
-          className="font-aurix text-[clamp(3.4rem,12vw,11rem)] leading-[0.92] tracking-[-0.04em]"
+          className="font-aurix text-[clamp(2.8rem,9vw,8rem)] leading-[0.92] tracking-[-0.04em]"
+          style={{ wordSpacing: "0.3em" }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE }}

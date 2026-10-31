@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 /**
- * The menu's companion (rev 27, client request): the line family stays —
+ * The menu's companion (rev 28, client request): the line family stays —
  * dashed wireframes only, the home star's six-pointed silhouette with the
- * longer top/bottom spikes — now at the SAME SIZE as the home page's star
- * (spikes run past the screen edges on desktop and phone alike), and every
+ * longer top/bottom spikes — at the SAME SIZE as the home page's star
+ * (spikes run past the screen edges on desktop and phone alike), with the
+ * lines FINED DOWN to the home star's delicacy (faint opacities, fine
+ * dashes) — and every
  * CORNER of the star shrinks and grows on its own random rhythm. Four
  * concentric echoes share one wireframe geometry whose
  * corner vertices are re-scaled each frame by six independent random
@@ -141,10 +143,10 @@ export default function ThreeVisual({ reducedMotion = false }) {
     const wire = starWireframe();
     disposables.push(wire);
     const echoDefs = [
-      { scale: 1.0, color: PALETTE.line, opacity: 0.85, dash: [0.2, 0.12], speed: 0.05, z: 0, phase: 0 },
-      { scale: 0.84, color: PALETTE.line, opacity: 0.5, dash: [0.12, 0.16], speed: -0.08, z: -0.35, phase: 2.1 },
-      { scale: 0.68, color: PALETTE.line, opacity: 0.35, dash: [0.26, 0.18], speed: 0.11, z: -0.7, phase: 4.2 },
-      { scale: 0.5, color: PALETTE.echo, opacity: 0.55, dash: [0.14, 0.14], speed: -0.14, z: -1.05, phase: 1.0 },
+      { scale: 1.0, color: PALETTE.line, opacity: 0.3, dash: [0.12, 0.08], speed: 0.05, z: 0, phase: 0 },
+      { scale: 0.84, color: PALETTE.line, opacity: 0.18, dash: [0.08, 0.1], speed: -0.08, z: -0.35, phase: 2.1 },
+      { scale: 0.68, color: PALETTE.line, opacity: 0.12, dash: [0.16, 0.11], speed: 0.11, z: -0.7, phase: 4.2 },
+      { scale: 0.5, color: PALETTE.echo, opacity: 0.16, dash: [0.09, 0.09], speed: -0.14, z: -1.05, phase: 1.0 },
     ];
     const echoes = echoDefs.map((def) => {
       const mat = new THREE.LineDashedMaterial({
@@ -312,12 +314,12 @@ export default function ThreeVisual({ reducedMotion = false }) {
                   return `${160 + Math.cos(a) * rad},${160 + Math.sin(a) * rad}`;
                 }).join(" ");
               return [
-                [1.0, "#111111", "10 6", 0.85],
-                [0.84, "#111111", "6 8", 0.5],
-                [0.68, "#111111", "13 9", 0.35],
-                [0.5, "#a3a3a3", "7 7", 0.55],
+                [1.0, "#111111", "7 5", 0.3],
+                [0.84, "#111111", "5 6", 0.18],
+                [0.68, "#111111", "10 7", 0.12],
+                [0.5, "#a3a3a3", "5 5", 0.16],
               ].map(([s, c, dash, o], i) => (
-                <polygon key={i} points={pts(s)} fill="none" stroke={c} strokeWidth="1.4" strokeDasharray={dash} opacity={o} />
+                <polygon key={i} points={pts(s)} fill="none" stroke={c} strokeWidth="1" strokeDasharray={dash} opacity={o} />
               ));
             })()}
           </g>

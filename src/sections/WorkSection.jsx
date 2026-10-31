@@ -25,8 +25,7 @@ export default function WorkSection() {
         </h1>
         <p
           aria-hidden="true"
-          className="microlabel relative z-10 mt-2 text-ink"
-          style={{ fontFamily: '"VCR OSD Mono", "Courier New", monospace' }}
+          className="relative z-10 -mt-3 text-[13px] uppercase tracking-[0.16em] text-ink font-vcr"
         >
           <ScrambleText text="Works" delay={1100} />
         </p>

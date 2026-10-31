@@ -5,8 +5,10 @@ import { portfolio } from "../data/portfolio.js";
 const EASE = [0.22, 1, 0.36, 1];
 
 /**
- * ABOUT — its own page. The heading and the biography sit centred, with no
- * portrait: the words carry the whole page, revealed sentence by sentence.
+ * ABOUT — its own page. The heading and the biography sit centred over the
+ * client's own OC line art (rev 30), fixed as a full-screen backdrop with its
+ * opacity pulled down so the ink reads as a gray drawing under the words,
+ * revealed sentence by sentence.
  */
 export default function AboutSection() {
   // Split the single biography string into sentences for a staggered reveal.
@@ -16,9 +18,18 @@ export default function AboutSection() {
     <section
       id="about"
       aria-labelledby="about-title"
-      className="page-pad flex min-h-svh flex-col items-center justify-center bg-canvas py-28 text-center md:py-36"
+      className="page-pad relative flex min-h-svh flex-col items-center justify-center bg-canvas py-28 text-center md:py-36"
     >
-      <div className="flex flex-col items-center">
+      {/* rev 30, client request: the client's own OC line art as a full-screen
+          backdrop, lowered opacity so its black lines read as gray. */}
+      <img
+        src="/images/about/mamuu-oc.svg"
+        alt=""
+        aria-hidden="true"
+        draggable="false"
+        className="pointer-events-none fixed inset-0 z-0 h-full w-full select-none object-contain opacity-[0.15]"
+      />
+      <div className="relative z-10 flex flex-col items-center">
         <motion.h1
           id="about-title"
           className="font-aurix text-[clamp(3rem,7.5vw,6.5rem)] leading-[0.95] tracking-[-0.03em]"

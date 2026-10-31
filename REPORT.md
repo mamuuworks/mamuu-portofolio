@@ -12,7 +12,118 @@ npm run preview  # port 4199 in this environment
 
 ---
 
-## 0. Revision 27 — the menu star grows to the home star's size: full-bleed at every width (client request)
+## 0. Revision 30 — the client's own OC line art as the About page's full-screen gray backdrop (client request)
+
+Client asks: the About page's background should be their own OC line-art SVG,
+full screen, with the opacity pulled down so the black lines read as gray.
+
+- **The asset** — downloaded from the client's filebin link and copied
+  verbatim to `public/images/about/mamuu-oc.svg` (76 KB, viewBox
+  1999.16 × 1981.25, 46 plain-black line paths — no fills, no strokes, no
+  raster). Opacity alone turns the ink gray, so the backdrop stays inside
+  the strictly monochrome palette.
+- **The backdrop** — `src/sections/AboutSection.jsx` gains a decorative
+  image (`aria-hidden`, empty `alt`, not draggable, `pointer-events-none`
+  `select-none`) fixed to the viewport at `inset-0 z-0`, full size,
+  `object-contain` (centred) at **15% opacity**; the section becomes
+  `relative` and the content wraps in a `relative z-10` layer so the words
+  sit above the drawing. `fixed` is safe here: the page wrapper animates
+  opacity only. The contained fit is the client-checked final state: the
+  whole character always stays inside the frame, as large as the viewport
+  allows (nearly full height on desktop, a centred square behind the words
+  on phones). A top-anchored `object-cover` was tried in between and
+  cropped the lower body at narrow widths — the client asked for no
+  cropping, so it was replaced by the contained fit.
+- **Verification** — production build 5.18 s (final, contained fit);
+  screenshots re-checked: the character fully visible at desktop and phone
+  — nothing cropped — the gray drawing behind the centred words, text
+  fully legible; console clean. Gates: lint `0 FAIL · 1 WARN`
+  (pre-existing em-dash), inspect about `0 FAIL · 4 WARN` and home
+  `0 FAIL · 5 WARN` (both `--allow mono,few-pictures`), chunk
+  `ThreeVisual-0HS9sK64.js` 5213 B (unchanged), CSS `index-vQd8ju3m.css`
+  20200 B.
+
+## 0a. Revision 29 — every VCR string renders UPPERCASE; the `Works` label returns to VCR, pulled tighter (client request)
+
+Client asks: (a) all text set in VCR OSD Mono should read UPPERCASE, (b) the
+Work page's `Works` label should go back to the VCR face and sit closer to
+the `MAMUU` wordmark above it.
+
+- **One global rule for the uppercase** — `src/index.css` declares
+  `@layer utilities { .font-vcr { text-transform: uppercase; } }`, so every
+  VCR OSD Mono string renders in caps without touching a single component:
+  nav labels, menu links, About prose, work card title chips, lightbox
+  title/description, all Contact copy (`COMMISSIONS…`, `START A PROJECT`,
+  socials, the © line, the `MAMUU-WORK` footer) — and the `Works` label.
+  Source strings stay mixed-case (`"Works"` and friends), so `ScrambleText`
+  shuffling and screen readers are unaffected; the transform is purely
+  visual CSS.
+- **`Works` label back to VCR OSD Mono** — the client reverses rev 28's
+  Aurix switch: `src/sections/WorkSection.jsx` swaps `font-aurix` →
+  `font-vcr` and replaces rev 28's `mt-0` with **`-mt-3`**, pulling the
+  13 px label up tight under the giant `MAMUU` (screenshot-verified: close,
+  no overlap). With the label off Aurix, Aurix now serves only the four
+  headline wordmarks and the contact display line, as before rev 28.
+- **Verification** — production build 4.10 s; screenshots re-checked at
+  desktop/mobile: WORKS in VCR tight under MAMUU; About prose all caps;
+  Contact fully caps; menu overlay links caps with the rev 28 fine faint
+  line star unchanged; console clean. Gates: lint `0 FAIL · 1 WARN`
+  (pre-existing em-dash), inspect home `0 FAIL · 5 WARN`
+  (`--allow mono,few-pictures`), chunk `ThreeVisual-W5i2aD-E.js` 5213 B
+  (unchanged), CSS `index-Dzri0yaa.css` 20097 B.
+
+## 0b. Revision 28 — finer menu lines, Aurix `Works` label, smaller word-spaced `LET'S CONNECT`, `mamuu-work` footer, the client's real biography (client request)
+
+Four typography/content fixes in one pass:
+
+- **Menu 3D lines thinned to the home star's delicacy** — the client
+  found the wireframe too heavy next to the home page's fine lines. The
+  four dashed echoes drop from opacities 0.85 / 0.5 / 0.35 / 0.55 to
+  **0.3 / 0.18 / 0.12 / 0.16** with finer dash rhythms
+  (`[0.2, 0.12]` → `[0.12, 0.08]` and so on), matching the home star's
+  faint 0.12 / 0.08 wireframe reading; the flat SVG fallback thins with
+  them (strokeWidth 1.4 → 1, lighter opacities, shorter dashes).
+  Geometry, scale (2.4), slant, corner pulses and the dust field are
+  untouched — a line-weight change only.
+- **Work page** — the `Works` microlabel switches from VCR OSD Mono to
+  **Aurix**, the same display face as the giant `MAMUU` above it, and
+  closes the gap to the wordmark (`mt-2` → `mt-0`).
+- **Contact page** — the footer project line reads **`mamuu-work`**
+  (was `mamuu-portofolio`, via `portfolio.projectName`);
+  `LET'S CONNECT` steps down a size class
+  (`clamp(3.4rem, 12vw, 11rem)` → `clamp(2.8rem, 9vw, 8rem)`) and gains
+  a clear gap between the two words (`word-spacing: 0.3em`).
+- **About biography** replaced with the client-supplied real copy —
+  career from age 15 in the creative industry: music videos, motion
+  graphics, visualizers, live event visuals (BGAs), Indonesian
+  government projects, then international creative clients; now event
+  visuals national + international and music videos for indie and
+  international VTubers. The placeholder note is retired.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — echo opacities/dashes, SVG
+  fallback, docblock rev 28.
+- `src/sections/WorkSection.jsx` — `Works` label class (Aurix, `mt-0`).
+- `src/sections/ContactSection.jsx` — headline clamp + word-spacing.
+- `src/data/portfolio.js` — `projectName` → `mamuu-work`; new
+  client-supplied `biography`.
+
+### Gate
+
+`npm run build` ✓ (7.8 s; `ThreeVisual` lazy chunk **5213 B ≈ 5.1 KB**,
+`ThreeVisual-B0dGTazk.js`). lint **0 FAIL · 1 WARN** (em-dash,
+pre-existing). inspect home **0 FAIL · 5 WARN** (`--allow
+mono,few-pictures`). Screenshot-verified from the production build:
+menu at 1440×900, 390×844 and a late frame — the lines now read faint
+and fine like the home star's, full-bleed kept, links legible; work
+fold — `Works` in Aurix sitting tight under `MAMUU`; contact fold —
+the smaller word-spaced `LET'S CONNECT` and footer `MAMUU-WORK`; about
+fold — the new biography; console clean.
+
+---
+
+## 0c. Revision 27 — the menu star grows to the home star's size: full-bleed at every width (client request)
 
 The client asked for the menu's 3D to be enlarged again, **as big as the
 home page's star**. The home star reads at a fixed apparent size: SPIKE
@@ -55,7 +166,7 @@ random lengths; console clean.
 
 ---
 
-## 0a. Revision 26 — the menu star enlarged again: scale up at both widths, spikes may kiss the edges at a pulse peak (client request)
+## 0d. Revision 26 — the menu star enlarged again: scale up at both widths, spikes may kiss the edges at a pulse peak (client request)
 
 The client asked for the menu's 3D to be **bigger again**. Rev 25's near
 full-bleed figure grows once more, without touching the verified camera
@@ -97,7 +208,7 @@ lengths differ frame to frame, phone full-bleed kept, console clean.
 
 ---
 
-## 0b. Revision 25 — the menu star becomes a near full-screen background at every width, its corners pulsing at random (client request)
+## 0e. Revision 25 — the menu star becomes a near full-screen background at every width, its corners pulsing at random (client request)
 
 The client asked for the menu's 3D to become a **background that nearly
 fills the screen** — **never shrinking on a phone**, still the background
@@ -153,7 +264,7 @@ legible over the lines at both widths, console clean.
 
 ---
 
-## 0c. Revision 24 — the menu's geometry returns to lines only, shaped as the home star, slanted, filling half the page (client request)
+## 0f. Revision 24 — the menu's geometry returns to lines only, shaped as the home star, slanted, filling half the page (client request)
 
 The client asked for the menu geometry to go back to **lines only, like
 before** — but now shaped as the **home page's six-pointed star** (the top
@@ -224,7 +335,7 @@ HOME/WORK/ABOUT/CONTACT legible below, console clean.
 
 ---
 
-## 0d. Revision 23 — the menu's star becomes solid 3D like the home page, bigger, waving (client request)
+## 0g. Revision 23 — the menu's star becomes solid 3D like the home page, bigger, waving (client request)
 
 The client asked for the menu's star to become **abstract geometry like the
 home page's, bigger, with an abstract 3D wave motion**. The rev 22 dashed
@@ -280,7 +391,7 @@ console clean.
 
 ---
 
-## 0e. Revision 22 — the menu becomes a six-pointed star again, as an abstract hexagram mandala (client request)
+## 0h. Revision 22 — the menu becomes a six-pointed star again, as an abstract hexagram mandala (client request)
 
 The client asked for the menu's 3D to be a **six-pointed star like the home
 page — but not too similar: a unique abstract variation**. The rev 21 spiral
@@ -332,7 +443,7 @@ clean.
 
 ---
 
-## 0f. Revision 21 — the menu's 3D geometry becomes its own stardust variation (client request)
+## 0i. Revision 21 — the menu's 3D geometry becomes its own stardust variation (client request)
 
 The client asked for the menu page's Three.js geometry to be replaced with
 **stardust like the home intro — but not a copy: a unique variation**. The
@@ -378,7 +489,7 @@ galaxy behind the links, no hairline artifacts, comet verified mid-flight
 
 ---
 
-## 0g. Revision 20 — the circle stops at MEDIUM and transforms into the stardust directly, quicker still (client request)
+## 0j. Revision 20 — the circle stops at MEDIUM and transforms into the stardust directly, quicker still (client request)
 
 The client reviewed rev 19's intro with two changes: the black circle
 should **never reach full size** — it becomes **medium**, then transforms
@@ -426,7 +537,7 @@ landed, settled identical to rev 19's lockup. Mobile settled correct.
 
 ---
 
-## 0h. Revision 19 — the circle grows INTO the stardust (centre → left), text emerges from behind it to the right, quicker (client request)
+## 0k. Revision 19 — the circle grows INTO the stardust (centre → left), text emerges from behind it to the right, quicker (client request)
 
 The client reviewed rev 18's intro with three changes: the circle should
 grow **into** the stardust (not dissolve in place), the speed should not be
@@ -476,7 +587,7 @@ Mobile settled correct.
 
 ---
 
-## 0i. Revision 18 — the circle appears small first, then grows slowly (client request)
+## 0l. Revision 18 — the circle appears small first, then grows slowly (client request)
 
 The client reviewed rev 17's intro and read the entrance as "masih sama
 saja" — the circle still seemed to just pop in at size. The numbers agreed:
@@ -522,7 +633,7 @@ asked: small appears first → slowly grows → stardust.
 
 ---
 
-## 0j. Revision 17 — medium-size circle + マムー in the Aurix-first stack (client request)
+## 0m. Revision 17 — medium-size circle + マムー in the Aurix-first stack (client request)
 
 Two changes to the home intro, both client-requested:
 
@@ -557,7 +668,7 @@ correctly beside the wordmark's end. Fallback SVG unchanged from rev 16.
 
 ---
 
-## 0k. Revision 16 — the circle grows into the stardust + マムー restored (client request)
+## 0n. Revision 16 — the circle grows into the stardust + マムー restored (client request)
 
 Two changes to the home intro, both client-requested:
 
@@ -603,7 +714,7 @@ rendered standalone with the embedded font. Console clean.
 
 ---
 
-## 0l. Revision 15 — smaller logo, circle dissolves into the stardust, new layer order (client request)
+## 0o. Revision 15 — smaller logo, circle dissolves into the stardust, new layer order (client request)
 
 Three changes to the rev 14 intro, all client-requested:
 
@@ -633,7 +744,7 @@ clean.
 
 ---
 
-## 0m. Revision 14 — the client's SVG logo as an animated Three.js home intro (client request)
+## 0p. Revision 14 — the client's SVG logo as an animated Three.js home intro (client request)
 
 The home `MAMUU` wordmark (Aurix + `ScrambleText`, rev 10) is replaced by the
 client's own logo, supplied as `LOGO mamuuu.svg` (viewBox `0 0 1419 854.8`),
@@ -693,7 +804,7 @@ screenshot-verified at 1440×900 and 390×844; console clean.
 
 ---
 
-## 0n. Revision 13 — real contact links + email (client request)
+## 0q. Revision 13 — real contact links + email (client request)
 
 The placeholder destinations in `portfolio.socialLinks` are now the client's
 real accounts, flowing to every consumer (contact pill button `mailto:`,
@@ -713,7 +824,7 @@ WARN** (unchanged list). No visual change expected — hrefs only.
 
 ---
 
-## 0o. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
+## 0r. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
 
 Two follow-ups to rev 11:
 
@@ -741,7 +852,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0p. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
+## 0s. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
 
 Two follow-ups to rev 10:
 
@@ -763,7 +874,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0q. Revision 10 — Aurix display face for the five wordmarks (client request)
+## 0t. Revision 10 — Aurix display face for the five wordmarks (client request)
 
 Client supplied the Aurix free font and asked that the five headline
 wordmarks switch to it: home `MAMUU`, about `ABOUT ME`, work `MAMUU`,
@@ -792,7 +903,7 @@ Aurix renders on every wordmark, menu links stay in VCR OSD Mono.
 
 ---
 
-## 0r. Revision 9 — alternating spike morph + bigger star (client request)
+## 0u. Revision 9 — alternating spike morph + bigger star (client request)
 
 Two changes to the home backdrop only:
 
@@ -815,7 +926,7 @@ untouched; `HomeSection.jsx` unchanged in this revision.
 
 ---
 
-## 0s. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
+## 0v. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
 
 Four changes to the rev-7 home:
 
@@ -846,7 +957,7 @@ scripted). Work/about/contact untouched.
 
 ---
 
-## 0t. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
+## 0w. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
 
 The home page is rebuilt around one new request: replace the m-wordmark +
 mascot hero with a **3D wireframe six-pointed star** backdrop (same family as
@@ -887,7 +998,7 @@ before); inspect **0 FAIL** on home — 4 WARN (`first-action`,
 
 ---
 
-## 0u. Revision 6 — about/home trim + all-VCR contact (client request)
+## 0x. Revision 6 — about/home trim + all-VCR contact (client request)
 
 Three changes shipped:
 
@@ -908,7 +1019,7 @@ about 4 WARN, contact 4 WARN (all defensible, table in §3).
 
 ---
 
-## 0v. Revision 5 — remove all Japanese text (client request)
+## 0y. Revision 5 — remove all Japanese text (client request)
 
 The katakana label (drawn as SVG) is removed everywhere: the floating mark
 next to the home wordmark, both marks in the menu overlay, the
@@ -920,7 +1031,7 @@ README no longer reference the label.
 
 ---
 
-## 0w. Revision 4 — VCR OSD Mono + final polish (client request)
+## 0z. Revision 4 — VCR OSD Mono + final polish (client request)
 
 Four changes requested and shipped:
 
@@ -946,7 +1057,7 @@ Four changes requested and shipped:
    in `index.css` and `--allow mono` in the inspector runs — the face is a
    client requirement, so it is brand, not a tell.
 
-## 0x. Revision 3 — monochrome + mac-window chrome + scramble (client request)
+## 0aa. Revision 3 — monochrome + mac-window chrome + scramble (client request)
 
 Six changes requested and shipped:
 
@@ -997,7 +1108,7 @@ Also fixed in this revision:
   (`public/images/works/work-01..06.png`), so the raster assets match the
   monochrome art.
 
-## 0y. Revision 2 — separate pages
+## 0ab. Revision 2 — separate pages
 
 Historical (kept for context):
 
@@ -1039,7 +1150,8 @@ Mamuu's name is drawn as a creature — an "m" with eyes. The mark recurs:
    top/bottom spikes, SPIKE 3.2 / SIDE 1.95 / INNER 0.85, per-point jitter)
    drawn as a slanted dashed line-wireframe — four counter-rotating echoes
    of one shared `EdgesGeometry` (three ink + one deepest-gray), no solid
-   fills — spanning ≈ 1.9× the half-height at every width (the same size
+   fills, the lines fined down to the home star's faint reading (rev 28)
+   — spanning ≈ 1.9× the half-height at every width (the same size
    class as the home star: spikes run past all four edges at rest, on
    desktop and phone alike — it never shrinks), with **every corner
    shrinking/growing at random** (six independent clocks, ±15%, valleys
@@ -1047,9 +1159,11 @@ Mamuu's name is drawn as a creature — an "m" with eyes. The mark recurs:
    breathing and pointer tilt.
 
 Type (rev 4 + rev 10 + rev 12): **VCR OSD Mono** (nav row, menu links, About
-prose, `Works` label, work card titles + lightbox title/description —
-client requested, self-hosted 400-weight WOFF) + **Aurix** (display, the
-four remaining headline wordmarks — work, about, contact, menu; home now
+prose, work card titles + lightbox title/description —
+client requested, self-hosted 400-weight WOFF; all VCR strings render
+UPPERCASE via a global rule since rev 29) + **Aurix** (display, the
+four remaining headline wordmarks — work, about, contact, menu — the
+Work page's `Works` label returned to VCR OSD Mono in rev 29; home now
 shows the client's SVG logo instead — client supplied, rev 10, self-hosted
 regular 400)
 + **Space Grotesk** (display fallback + everything not listed) + **DM Sans**
@@ -1100,8 +1214,8 @@ is currently unused; the file is kept on disk in case the creature returns.
 ### Build
 `npm run build` — **passes**. Main bundle ~821 KB: since rev 14 `LogoIntro`
 imports Three.js directly, so the library now ships in the main chunk
-(`StarVisual` 2.7 KB and `ThreeVisual` 5216 B ≈ 5.1 KB — the menu dashed
-line star since rev 24/27 — remain lazy chunks).
+(`StarVisual` 2.7 KB and `ThreeVisual` 5213 B ≈ 5.1 KB — the menu dashed
+line star since rev 24/28 — remain lazy chunks).
 The chunk-size warning is expected and accepted.
 
 ### lint.mjs — 0 FAIL · 1 WARN
@@ -1120,8 +1234,8 @@ Production build served by `vite preview` (port 4199). Runs use
 → the medium disc swelling INTO the stardust while the star drifts centre → left → glyphs + マムー rising from behind the stardust and sliding right),
 the morphing star
 and the wave bob keep 10 elements moving — `still-page` fires only because the hero is a single viewport with no scroll. `few-pictures` is allowed because the gallery is its own page (`#/work`, 6 real raster works); home is a hero, not the catalogue. |
-| Work `#/work` | **0 FAIL** · 6 WARN | `micro-label`, `first-action`, `no-footage`, `small-title`, `name-only-title`, `still-page` | The huge `MAMUU` + `Works` header *is* the wordmark-as-title device; the microlabel is the client brand requirement (VCR OSD Mono since rev 11). Pieces animate in and the lightbox opens — the grid isn't inert. `font-count` cleared in rev 12 (imagery text shares the system faces). |
-| About `#/about` | **0 FAIL** · 4 WARN | `first-action`, `name-only-title`, `no-footage`, `still-page` | Same brand/footage defenses. Rev 6 removed the dot and tagline at the client's request — the page is deliberately sparse; 9 elements still move (staggered nav labels, scrambled h1, four sentence blocks). `few-pictures` allowed — a words-only About page is the client decision, the gallery lives at `#/work`. |
+| Work `#/work` | **0 FAIL** · 6 WARN | `micro-label`, `first-action`, `no-footage`, `small-title`, `name-only-title`, `still-page` | The huge `MAMUU` + `Works` header *is* the wordmark-as-title device; the microlabel is the client brand requirement — set in VCR OSD Mono again, pulled tighter under the wordmark (rev 29). Pieces animate in and the lightbox opens — the grid isn't inert. `font-count` cleared in rev 12 (imagery text shares the system faces). |
+| About `#/about` | **0 FAIL** · 4 WARN | `first-action`, `name-only-title`, `no-footage`, `still-page` | Same brand/footage defenses. Rev 6 removed the dot and tagline at the client's request — the page is deliberately sparse; 9 elements still move (staggered nav labels, scrambled h1, four sentence blocks). `few-pictures` allowed — the page's one artwork is the client's own OC line-art SVG (rev 30 backdrop), which the meter counts as a drawing rather than a raster picture; the gallery lives at `#/work`. |
 | Contact `#/contact` | **0 FAIL** · 4 WARN | `micro-label`, `no-footage`, `off-centre`, `still-page` | Microlabel is brand; no footage exists; staggered nav + scramble + button hover give motion. `off-centre` is a 16 px difference between the optical edges of the centred display headline — letterform side-bearings, not a layout error. `few-pictures` allowed — contact is a single call-to-action viewport by design. |
 
 `mono`: VCR OSD Mono is the client-requested brand face (rev 4) — waived with
@@ -1148,13 +1262,16 @@ Reviewed after the final build, every listed capture opened:
   settled, unchanged from rev 19) at 1440×900 and 390×844; the static fallback SVG
   (WebGL-off path) verified standalone, katakana rendering through its
   embedded data-URI font.
-- Work desktop fold: centred MAMUU (Aurix) + `Works` in VCR OSD Mono
-  (rev 11), six mac-window cards with three gray dots each; hover/focus
+- Work desktop fold: centred MAMUU (Aurix) with the `Works` label in
+  VCR OSD Mono tight beneath it (rev 29), six mac-window cards with three gray dots each; hover/focus
   title chips in VCR OSD Mono (rev 12); grayscale art.
-- About desktop fold: centred word page, **white ground**, biography set in
-  VCR OSD Mono, no nav dot, no accent dot under the heading and no tagline
-  (rev 6).
-- Contact desktop + mobile fold: `LET'S CONNECT` in display face, **every
+- About desktop + mobile fold (rev 30): the client's own OC line art as a
+  full-screen backdrop at 15% opacity — the black lines read as gray under
+  the words (`object-contain`, the whole character always inside the
+  frame, nothing cropped); centred word page, biography set in VCR OSD
+  Mono, no nav dot, no accent dot under the heading and no tagline (rev 6).
+- Contact desktop + mobile fold: `LET'S CONNECT` in display face,
+  stepped down and word-spaced (rev 28), **every
   other line in VCR OSD Mono** (rev 6); black pill "Start a project"; socials
   row; footer row inside the viewport.
 - **Menu overlay (`?menu=1`, re-verified in rev 4 via CDP with real settle
@@ -1192,14 +1309,19 @@ Reviewed after the final build, every listed capture opened:
   no active dot (rev 4); labels enter with a staggered rise (rev 6);
   `aria-current` kept for screen readers; skip link to `#main`. HOME and
   CONTACT live in the overlay.
-- **About** — heading + biography only: the accent dot and tagline were
-  removed in rev 6 (client request); sentences still reveal staggered.
-- **Contact** — display headline `LET'S CONNECT` set in Aurix (rev 10);
+- **About** — the client's own OC line art SVG as a full-screen fixed
+  backdrop at 15% opacity so the ink reads gray (rev 30,
+  `object-contain`, nothing cropped, decorative `aria-hidden` img); heading +
+  biography over it: the accent dot and tagline were removed in rev 6
+  (client request); sentences still reveal staggered.
+- **Contact** — display headline `LET'S CONNECT` set in Aurix (rev 10),
+  stepped down a size class and word-spaced (rev 28);
   every other line (copy, pill button, microlabel, footer) is VCR OSD Mono
   (rev 6).
 - **Work** — six slots, 16:9, 3/2/1-col rhythm, **mac-window cards** (rounded
   tone-step frame, three-dot title bar, no borders); `Works` microlabel in
-  VCR OSD Mono (rev 11); card titles + lightbox title/description in VCR
+  VCR OSD Mono again, pulled tighter (`-mt-3`) under the wordmark (rev 29;
+  Aurix rev 28, VCR rev 11); card titles + lightbox title/description in VCR
   OSD Mono (rev 12); **accessible lightbox**
   (ESC + backdrop close, focus trap, focus restored, same window chrome).
 - **Menu overlay** — full-screen; wordmark `MAMUU` in Aurix, compact
@@ -1208,7 +1330,8 @@ Reviewed after the final build, every listed capture opened:
   bundle since rev 14) and is fully disposed on close; since rev 27 the
   visual is the full-bleed dashed line-wireframe star family (the
   home star's proportions, slanted, corners pulsing at random, four
-  counter-rotating echoes); ESC to close; focus
+  counter-rotating echoes, lines fined to the home star's delicacy in
+  rev 28); ESC to close; focus
   trap; body scroll locked; reduced-motion and no-WebGL fallbacks; deep link
   `?menu=1`.
 - **ScrambleText** — first-open decode effect on headlines/labels (§2),
@@ -1228,12 +1351,12 @@ file):
 |---|---|
 | 6 work images (grayscale placeholders, 1600×900) | `public/images/works/work-01.png … work-06.png` (originals as SVG in `art/`) |
 | Work titles + descriptions | `src/data/portfolio.js` → `works` |
-| Bio (About page) | `src/data/portfolio.js` → `biography` |
 | Nav labels (top bar + overlay) | `src/data/portfolio.js` → `navSections` (top bar), `sections` (overlay) |
 | Email + social URLs (X, Instagram, VGen) — **real accounts since rev 13**: `sayhitomamuu@gmail.com`, `x.com/mamsenpai`, `instagram.com/mamsenpai`, `vgen.co/mamsenpai` | `src/data/portfolio.js` → `socialLinks` |
 
-Note: the About page intentionally shows **no portrait** (client decision); the
-old `public/images/character/character.png` is unused and can be deleted.
+Note: the About page's only imagery is the client's own OC line-art backdrop
+(rev 30) — no portrait photograph (client decision); the old
+`public/images/character/character.png` is unused and can be deleted.
 
 ## 6. File map
 
@@ -1249,6 +1372,7 @@ mamuu-portofolio/
 │                                マムー subset for the intro texture)
 ├── public/images/works/       ← work-01..06.png, 1600×900 (swap targets)
 ├── public/images/logo/        ← mamuu-logo-black.svg (rev 14 static logo fallback; rev 16 adds マムー with embedded font)
+├── public/images/about/       ← mamuu-oc.svg (rev 30: the client's own OC line art, full-screen About backdrop)
 ├── public/favicon.svg         (black bg, white m)
 ├── src/
 │   ├── App.jsx                ← hash router (PAGES, pageFromHash, navigate), ?menu=1
@@ -1265,12 +1389,12 @@ mamuu-portofolio/
 │   │   ├── Mascot.jsx         ← UNUSED since rev 7 (kept on disk, no imports)
 │   │   ├── SocialLinks.jsx    ← optional `animated` stagger; rev 7 adds rings via className
 │   │   ├── MenuOverlay.jsx    ← HOME/WORK/ABOUT/CONTACT (lazy Three.js full-screen line star, focus trap)
-│   │   └── ThreeVisual.jsx    ← rev 27 menu star: home-proportioned six-point silhouette (SPIKE 3.2 / SIDE 1.95 / INNER 0.85, jitter) as full-bleed slanted dashed line-wireframe (scale 2.4 at both widths — the home star's size, spikes run past the edges) — 4 counter-rotating echoes of one shared EdgesGeometry whose corners pulse at random (6 clocks, ±15%), dust field; posed frame for reduced motion + flat SVG fallback; full disposal incl. mote texture (lazy; three in main bundle)
+│   │   └── ThreeVisual.jsx    ← rev 28 menu star: home-proportioned six-point silhouette (SPIKE 3.2 / SIDE 1.95 / INNER 0.85, jitter) as full-bleed slanted fine-dashed line-wireframe, lines fined to the home star's faint reading (scale 2.4 at both widths — the home star's size, spikes run past the edges) — 4 counter-rotating echoes of one shared EdgesGeometry whose corners pulse at random (6 clocks, ±15%), dust field; posed frame for reduced motion + flat SVG fallback; full disposal incl. mote texture (lazy; three in main bundle)
 │   └── sections/
 │       ├── HomeSection.jsx    (rev 20: client SVG logo intro — circle at centre grows to medium → swells into stardust + drifts left → glyphs + マムー rise from behind sliding right, sized down + Y2K star backdrop + black round wave socials)
-│       ├── WorkSection.jsx    (centred MAMUU + Works, 6 mac-window cards)
-│       ├── AboutSection.jsx   (centred on white, no image, VCR prose, sentence stagger, no dot/tagline)
-│       └── ContactSection.jsx (one viewport, all-VCR text except display headline)
+│       ├── WorkSection.jsx    (centred MAMUU + VCR `Works` label pulled tight, 6 mac-window cards)
+│       ├── AboutSection.jsx   (client OC line art as full-screen 15%-opacity backdrop, centred VCR prose over it, sentence stagger, no dot/tagline)
+│       └── ContactSection.jsx (one viewport, all-VCR text except the display headline; footer mamuu-work)
 └── .taste-skill/              ← inspect/ screenshots + report.json; menu/ overlay shots
 ```
 
