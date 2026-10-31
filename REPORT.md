@@ -12,7 +12,37 @@ npm run preview  # port 4199 in this environment
 
 ---
 
-## 0. Revision 33 — the work loops play in full colour, and two new cover works join the list (client request)
+## 0. Revision 34 — the Work page splits into Video and Images tabs (client request)
+
+Client asks: a second work type — below the `Works` header, tabs
+Video / Images switch what the grid shows. Images start from what the
+project already has on disk.
+
+- **Tabs** — two VCR buttons centred under the wordmark (the rev 29
+  device): the active one a flat ink fill with canvas text, the inactive
+  one mute that darkens on hover; `aria-pressed` marks the state. Default
+  `Video` (the nine real works, unchanged). Switching crossfades the grid
+  (AnimatePresence, 0.25 s, dropped under `prefers-reduced-motion`) and
+  resets the lightbox.
+- **Images** — the six original character studies from the rev 8 art
+  (Little parade, Sun study, Plant friend, Bath time, Rainy window,
+  Three creatures — grayscale 1600×900 PNGs, unused since rev 32 but
+  never deleted) return as `imageWorks` in `src/data/portfolio.js`, each
+  `{ id, title, image, description }`. No new rendering code was needed:
+  the card and lightbox already carried an `image` branch (grayscale) —
+  the image lightbox shows title + note, no WATCH ON YOUTUBE, no credits.
+  Titles + notes are samples for the client's real artwork to replace.
+- **Verification** — production build 4.51 s; screenshots: work fold
+  (VIDEO chip filled, 9 coloured loops), Images tab (IMAGES chip filled,
+  6 grayscale studies, no VIDEO micro-tags) and the image lightbox
+  ("LITTLE PARADE" + note). Console clean. Gates: lint `0 FAIL · 1 WARN`
+  (pre-existing em-dash), inspect work `0 FAIL · 3 WARN` (`--allow mono`;
+  `first-action` cleared — the tabs are visible buttons in the first
+  screen; remaining: `micro-label`, `small-title`, `name-only-title`).
+  Main bundle 834 314 B, CSS `index-CjJfXO-E.css` 21175 B, chunk
+  `ThreeVisual-Ct47M24U.js` 5213 B.
+
+## 0a. Revision 33 — the work loops play in full colour, and two new cover works join the list (client request)
 
 Two client asks at once: **the videos must not be black-and-white**
 ("tidak hitam putih" — full colour, please), and two more cover works
@@ -55,7 +85,7 @@ join the page, again cut 30 seconds from the exact YouTube timestamps.
   832 955 B, chunk `ThreeVisual-BhlS8aK0.js` 5213 B, CSS
   `index-BUVkMWDi.css` 20978 B (grew with the 16px chips).
 
-## 0a. Revision 32 — all seven slots are real: self-hosted 30-second clips that autoplay on the cards (client request)
+## 0b. Revision 32 — all seven slots are real: self-hosted 30-second clips that autoplay on the cards (client request)
 
 Client asks: the Work page should be videos that **play on the page without
 being clicked** — each one cut from the exact YouTube timestamp they named,
@@ -108,7 +138,7 @@ credits for seven works (the six new ones join rev 31's "dreamseeker").
   831822 B; `public/videos/` ships as static assets (≈ 32 MB in `dist/`),
   not bundled.
 
-## 0b. Revision 31 — the first real video work: "dreamseeker" (client request)
+## 0c. Revision 31 — the first real video work: "dreamseeker" (client request)
 
 Client asks: the Work page will eventually be all video works; as the first
 real entry they supply the MV "dreamseeker" (YouTube link + full credit
@@ -155,7 +185,7 @@ roll).
   `ThreeVisual-Ccr4pSqe.js` 5213 B (unchanged), CSS
   `index-wEdWlyBO.css` 20883 B (+683 B).
 
-## 0c. Revision 30 — the client's own OC line art as the About page's full-screen gray backdrop (client request)
+## 0d. Revision 30 — the client's own OC line art as the About page's full-screen gray backdrop (client request)
 
 Client asks: the About page's background should be their own OC line-art SVG,
 full screen, with the opacity pulled down so the black lines read as gray.
@@ -186,7 +216,7 @@ full screen, with the opacity pulled down so the black lines read as gray.
   `ThreeVisual-0HS9sK64.js` 5213 B (unchanged), CSS `index-vQd8ju3m.css`
   20200 B.
 
-## 0d. Revision 29 — every VCR string renders UPPERCASE; the `Works` label returns to VCR, pulled tighter (client request)
+## 0e. Revision 29 — every VCR string renders UPPERCASE; the `Works` label returns to VCR, pulled tighter (client request)
 
 Client asks: (a) all text set in VCR OSD Mono should read UPPERCASE, (b) the
 Work page's `Works` label should go back to the VCR face and sit closer to
@@ -215,7 +245,7 @@ the `MAMUU` wordmark above it.
   (`--allow mono,few-pictures`), chunk `ThreeVisual-W5i2aD-E.js` 5213 B
   (unchanged), CSS `index-Dzri0yaa.css` 20097 B.
 
-## 0e. Revision 28 — finer menu lines, Aurix `Works` label, smaller word-spaced `LET'S CONNECT`, `mamuu-work` footer, the client's real biography (client request)
+## 0f. Revision 28 — finer menu lines, Aurix `Works` label, smaller word-spaced `LET'S CONNECT`, `mamuu-work` footer, the client's real biography (client request)
 
 Four typography/content fixes in one pass:
 
@@ -266,7 +296,7 @@ fold — the new biography; console clean.
 
 ---
 
-## 0f. Revision 27 — the menu star grows to the home star's size: full-bleed at every width (client request)
+## 0g. Revision 27 — the menu star grows to the home star's size: full-bleed at every width (client request)
 
 The client asked for the menu's 3D to be enlarged again, **as big as the
 home page's star**. The home star reads at a fixed apparent size: SPIKE
@@ -309,7 +339,7 @@ random lengths; console clean.
 
 ---
 
-## 0g. Revision 26 — the menu star enlarged again: scale up at both widths, spikes may kiss the edges at a pulse peak (client request)
+## 0h. Revision 26 — the menu star enlarged again: scale up at both widths, spikes may kiss the edges at a pulse peak (client request)
 
 The client asked for the menu's 3D to be **bigger again**. Rev 25's near
 full-bleed figure grows once more, without touching the verified camera
@@ -351,7 +381,7 @@ lengths differ frame to frame, phone full-bleed kept, console clean.
 
 ---
 
-## 0h. Revision 25 — the menu star becomes a near full-screen background at every width, its corners pulsing at random (client request)
+## 0i. Revision 25 — the menu star becomes a near full-screen background at every width, its corners pulsing at random (client request)
 
 The client asked for the menu's 3D to become a **background that nearly
 fills the screen** — **never shrinking on a phone**, still the background
@@ -407,7 +437,7 @@ legible over the lines at both widths, console clean.
 
 ---
 
-## 0i. Revision 24 — the menu's geometry returns to lines only, shaped as the home star, slanted, filling half the page (client request)
+## 0j. Revision 24 — the menu's geometry returns to lines only, shaped as the home star, slanted, filling half the page (client request)
 
 The client asked for the menu geometry to go back to **lines only, like
 before** — but now shaped as the **home page's six-pointed star** (the top
@@ -478,7 +508,7 @@ HOME/WORK/ABOUT/CONTACT legible below, console clean.
 
 ---
 
-## 0j. Revision 23 — the menu's star becomes solid 3D like the home page, bigger, waving (client request)
+## 0k. Revision 23 — the menu's star becomes solid 3D like the home page, bigger, waving (client request)
 
 The client asked for the menu's star to become **abstract geometry like the
 home page's, bigger, with an abstract 3D wave motion**. The rev 22 dashed
@@ -534,7 +564,7 @@ console clean.
 
 ---
 
-## 0k. Revision 22 — the menu becomes a six-pointed star again, as an abstract hexagram mandala (client request)
+## 0l. Revision 22 — the menu becomes a six-pointed star again, as an abstract hexagram mandala (client request)
 
 The client asked for the menu's 3D to be a **six-pointed star like the home
 page — but not too similar: a unique abstract variation**. The rev 21 spiral
@@ -586,7 +616,7 @@ clean.
 
 ---
 
-## 0l. Revision 21 — the menu's 3D geometry becomes its own stardust variation (client request)
+## 0m. Revision 21 — the menu's 3D geometry becomes its own stardust variation (client request)
 
 The client asked for the menu page's Three.js geometry to be replaced with
 **stardust like the home intro — but not a copy: a unique variation**. The
@@ -632,7 +662,7 @@ galaxy behind the links, no hairline artifacts, comet verified mid-flight
 
 ---
 
-## 0m. Revision 20 — the circle stops at MEDIUM and transforms into the stardust directly, quicker still (client request)
+## 0n. Revision 20 — the circle stops at MEDIUM and transforms into the stardust directly, quicker still (client request)
 
 The client reviewed rev 19's intro with two changes: the black circle
 should **never reach full size** — it becomes **medium**, then transforms
@@ -680,7 +710,7 @@ landed, settled identical to rev 19's lockup. Mobile settled correct.
 
 ---
 
-## 0n. Revision 19 — the circle grows INTO the stardust (centre → left), text emerges from behind it to the right, quicker (client request)
+## 0o. Revision 19 — the circle grows INTO the stardust (centre → left), text emerges from behind it to the right, quicker (client request)
 
 The client reviewed rev 18's intro with three changes: the circle should
 grow **into** the stardust (not dissolve in place), the speed should not be
@@ -730,7 +760,7 @@ Mobile settled correct.
 
 ---
 
-## 0o. Revision 18 — the circle appears small first, then grows slowly (client request)
+## 0p. Revision 18 — the circle appears small first, then grows slowly (client request)
 
 The client reviewed rev 17's intro and read the entrance as "masih sama
 saja" — the circle still seemed to just pop in at size. The numbers agreed:
@@ -776,7 +806,7 @@ asked: small appears first → slowly grows → stardust.
 
 ---
 
-## 0p. Revision 17 — medium-size circle + マムー in the Aurix-first stack (client request)
+## 0q. Revision 17 — medium-size circle + マムー in the Aurix-first stack (client request)
 
 Two changes to the home intro, both client-requested:
 
@@ -811,7 +841,7 @@ correctly beside the wordmark's end. Fallback SVG unchanged from rev 16.
 
 ---
 
-## 0q. Revision 16 — the circle grows into the stardust + マムー restored (client request)
+## 0r. Revision 16 — the circle grows into the stardust + マムー restored (client request)
 
 Two changes to the home intro, both client-requested:
 
@@ -857,7 +887,7 @@ rendered standalone with the embedded font. Console clean.
 
 ---
 
-## 0r. Revision 15 — smaller logo, circle dissolves into the stardust, new layer order (client request)
+## 0s. Revision 15 — smaller logo, circle dissolves into the stardust, new layer order (client request)
 
 Three changes to the rev 14 intro, all client-requested:
 
@@ -887,7 +917,7 @@ clean.
 
 ---
 
-## 0s. Revision 14 — the client's SVG logo as an animated Three.js home intro (client request)
+## 0t. Revision 14 — the client's SVG logo as an animated Three.js home intro (client request)
 
 The home `MAMUU` wordmark (Aurix + `ScrambleText`, rev 10) is replaced by the
 client's own logo, supplied as `LOGO mamuuu.svg` (viewBox `0 0 1419 854.8`),
@@ -947,7 +977,7 @@ screenshot-verified at 1440×900 and 390×844; console clean.
 
 ---
 
-## 0t. Revision 13 — real contact links + email (client request)
+## 0u. Revision 13 — real contact links + email (client request)
 
 The placeholder destinations in `portfolio.socialLinks` are now the client's
 real accounts, flowing to every consumer (contact pill button `mailto:`,
@@ -967,7 +997,7 @@ WARN** (unchanged list). No visual change expected — hrefs only.
 
 ---
 
-## 0u. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
+## 0v. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
 
 Two follow-ups to rev 11:
 
@@ -995,7 +1025,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0v. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
+## 0w. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
 
 Two follow-ups to rev 10:
 
@@ -1017,7 +1047,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0w. Revision 10 — Aurix display face for the five wordmarks (client request)
+## 0x. Revision 10 — Aurix display face for the five wordmarks (client request)
 
 Client supplied the Aurix free font and asked that the five headline
 wordmarks switch to it: home `MAMUU`, about `ABOUT ME`, work `MAMUU`,
@@ -1046,7 +1076,7 @@ Aurix renders on every wordmark, menu links stay in VCR OSD Mono.
 
 ---
 
-## 0x. Revision 9 — alternating spike morph + bigger star (client request)
+## 0y. Revision 9 — alternating spike morph + bigger star (client request)
 
 Two changes to the home backdrop only:
 
@@ -1069,7 +1099,7 @@ untouched; `HomeSection.jsx` unchanged in this revision.
 
 ---
 
-## 0y. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
+## 0z. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
 
 Four changes to the rev-7 home:
 
@@ -1100,7 +1130,7 @@ scripted). Work/about/contact untouched.
 
 ---
 
-## 0z. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
+## 0aa. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
 
 The home page is rebuilt around one new request: replace the m-wordmark +
 mascot hero with a **3D wireframe six-pointed star** backdrop (same family as
@@ -1141,7 +1171,7 @@ before); inspect **0 FAIL** on home — 4 WARN (`first-action`,
 
 ---
 
-## 0aa. Revision 6 — about/home trim + all-VCR contact (client request)
+## 0ab. Revision 6 — about/home trim + all-VCR contact (client request)
 
 Three changes shipped:
 
@@ -1162,7 +1192,7 @@ about 4 WARN, contact 4 WARN (all defensible, table in §3).
 
 ---
 
-## 0ab. Revision 5 — remove all Japanese text (client request)
+## 0ac. Revision 5 — remove all Japanese text (client request)
 
 The katakana label (drawn as SVG) is removed everywhere: the floating mark
 next to the home wordmark, both marks in the menu overlay, the
@@ -1174,7 +1204,7 @@ README no longer reference the label.
 
 ---
 
-## 0ac. Revision 4 — VCR OSD Mono + final polish (client request)
+## 0ad. Revision 4 — VCR OSD Mono + final polish (client request)
 
 Four changes requested and shipped:
 
@@ -1200,7 +1230,7 @@ Four changes requested and shipped:
    in `index.css` and `--allow mono` in the inspector runs — the face is a
    client requirement, so it is brand, not a tell.
 
-## 0ad. Revision 3 — monochrome + mac-window chrome + scramble (client request)
+## 0ae. Revision 3 — monochrome + mac-window chrome + scramble (client request)
 
 Six changes requested and shipped:
 
@@ -1251,7 +1281,7 @@ Also fixed in this revision:
   (`public/images/works/work-01..06.png`), so the raster assets match the
   monochrome art.
 
-## 0ae. Revision 2 — separate pages
+## 0af. Revision 2 — separate pages
 
 Historical (kept for context):
 
@@ -1284,12 +1314,14 @@ Mamuu's name is drawn as a creature — an "m" with eyes. The mark recurs:
    sized down per client (`w-[min(76vw,760px)]`); the rev 9 abstract Y2K
    wireframe star still turns faintly behind it, slightly tilted. The
    solid-black round contact buttons hang below, bobbing like water waves.
-2. **Gallery art** — since rev 32 all slots are the client's real video
+2. **Gallery art** — the Video tab (rev 34) holds the client's real video
    works (nine since rev 33): each card plays a self-hosted 30-second clip
    (cut from the exact YouTube timestamp the client named), muted +
    looped, with a poster frame from that same moment — in full colour
    since rev 33 (the client's explicit exception to the monochrome house
-   style, like the home social circles). No stock imagery anywhere.
+   style, like the home social circles). The Images tab (rev 34) shows the
+   six original character studies from the rev 8 art — placeholders until
+   the client's real artwork arrives. No stock imagery anywhere.
 3. **Menu** — since rev 27 the geometry is a **full-screen background at
    the home star's size** of **lines only**, shaped as the home star: the
    six-pointed silhouette with the home star's proportions (longer
@@ -1350,7 +1382,8 @@ image).
 muted and looped, so the grid is moving footage the moment it loads; the
 lightbox plays the same clip and deep-links to the source video. Since
 rev 33 the footage runs in full colour — the client asked for it
-explicitly — so nine coloured loops greet the fold.
+explicitly — and since rev 34 Video/Images tabs under the header switch
+the grid: nine coloured loops or six character studies, crossfaded.
 
 **Text is alive too (revision 3):** every headline and label scrambles into
 place on first open via `ScrambleText.jsx` — rAF-driven character shuffle at a
@@ -1365,11 +1398,11 @@ is currently unused; the file is kept on disk in case the creature returns.
 ## 3. Verification — honest results (post-revision-20, production build)
 
 ### Build
-`npm run build` — **passes** (4.2 s in rev 33). Main bundle ~833 KB
-(832 955 B): since rev 14 `LogoIntro` imports Three.js directly, so the
+`npm run build` — **passes** (4.5 s in rev 34). Main bundle ~834 KB
+(834 314 B): since rev 14 `LogoIntro` imports Three.js directly, so the
 library now ships in the main chunk (`StarVisual` 2.7 KB and
 `ThreeVisual` 5213 B ≈ 5.1 KB — the menu dashed line star since rev 24/28
-— remain lazy chunks; CSS `index-BUVkMWDi.css` 20978 B). Since rev 32 the
+— remain lazy chunks; CSS `index-CjJfXO-E.css` 21175 B). Since rev 32 the
 build also ships self-hosted MP4 clips + poster JPGs under
 `public/videos/` — 18 files ≈ 38 MB since rev 33 — static assets served
 as-is, not bundled.
@@ -1391,7 +1424,7 @@ Production build served by `vite preview` (port 4199). Runs use
 → the medium disc swelling INTO the stardust while the star drifts centre → left → glyphs + マムー rising from behind the stardust and sliding right),
 the morphing star
 and the wave bob keep 10 elements moving — `still-page` fires only because the hero is a single viewport with no scroll. `few-pictures` is allowed because the gallery is its own page (`#/work`, 6 real raster works); home is a hero, not the catalogue. |
-| Work `#/work` | **0 FAIL** · 4 WARN | `micro-label`, `first-action`, `small-title`, `name-only-title` | The huge `MAMUU` + `Works` header *is* the wordmark-as-title device; the microlabel is the client brand requirement — set in VCR OSD Mono again, pulled tighter under the wordmark (rev 29). `no-footage` and `still-page` cleared in rev 32 — every card plays real moving footage (the client's own clips). `body-size` cleared in rev 33 — nine longer titles made 14px the majority, so the hover chips moved to 16px and wrap. Pieces animate in and the lightbox opens — the grid isn't inert. `font-count` cleared in rev 12 (imagery text shares the system faces). |
+| Work `#/work` | **0 FAIL** · 3 WARN | `micro-label`, `small-title`, `name-only-title` | The huge `MAMUU` + `Works` header *is* the wordmark-as-title device; the microlabel is the client brand requirement — set in VCR OSD Mono again, pulled tighter under the wordmark (rev 29). `no-footage` and `still-page` cleared in rev 32 — every card plays real moving footage (the client's own clips). `body-size` cleared in rev 33 — nine longer titles made 14px the majority, so the hover chips moved to 16px and wrap. `first-action` cleared in rev 34 — the Video/Images tabs are visible buttons in the first screen. Pieces animate in and the lightbox opens — the grid isn't inert. `font-count` cleared in rev 12 (imagery text shares the system faces). |
 | About `#/about` | **0 FAIL** · 4 WARN | `first-action`, `name-only-title`, `no-footage`, `still-page` | Same brand/footage defenses. Rev 6 removed the dot and tagline at the client's request — the page is deliberately sparse; 9 elements still move (staggered nav labels, scrambled h1, four sentence blocks). `few-pictures` allowed — the page's one artwork is the client's own OC line-art SVG (rev 30 backdrop), which the meter counts as a drawing rather than a raster picture; the gallery lives at `#/work`. |
 | Contact `#/contact` | **0 FAIL** · 4 WARN | `micro-label`, `no-footage`, `off-centre`, `still-page` | Microlabel is brand; no footage exists; staggered nav + scramble + button hover give motion. `off-centre` is a 16 px difference between the optical edges of the centred display headline — letterform side-bearings, not a layout error. `few-pictures` allowed — contact is a single call-to-action viewport by design. |
 
@@ -1420,14 +1453,15 @@ Reviewed after the final build, every listed capture opened:
   (WebGL-off path) verified standalone, katakana rendering through its
   embedded data-URI font.
 - Work desktop fold: centred MAMUU (Aurix) with the `Works` label in
-  VCR OSD Mono tight beneath it (rev 29), nine mac-window cards with three
-  gray dots each (two added in rev 33); since rev 32 every card autoplays
-  its own self-hosted 30-second clip — muted, looped — with a `VIDEO`
-  micro-tag in its title bar, in full colour since rev 33 (screenshot
-  caught the fold cards mid-playback at different frames: the loops really
-  run; the pink-purple "mosi mosi?" pops against the monochrome frame);
-  hover/focus title chips in VCR OSD Mono (rev 12, 16px since rev 33 so
-  long titles wrap), slight scale on hover/focus.
+  VCR OSD Mono tight beneath it (rev 29); since rev 34 Video/Images tabs
+  sit under the header (active tab a flat ink chip). The Video tab shows
+  nine mac-window cards with three gray dots each — every card autoplays
+  its own self-hosted 30-second clip (muted, looped, `VIDEO` micro-tag),
+  in full colour since rev 33 (screenshot caught the fold cards
+  mid-playback at different frames: the loops really run; the pink-purple
+  "mosi mosi?" pops). The Images tab shows the six grayscale character
+  studies, no micro-tags. Hover/focus title chips in VCR OSD Mono (rev 12,
+  16px since rev 33 so long titles wrap), slight scale on hover/focus.
 - About desktop + mobile fold (rev 30): the client's own OC line art as a
   full-screen backdrop at 15% opacity — the black lines read as gray under
   the words (`object-contain`, the whole character always inside the
@@ -1481,20 +1515,24 @@ Reviewed after the final build, every listed capture opened:
   stepped down a size class and word-spaced (rev 28);
   every other line (copy, pill button, microlabel, footer) is VCR OSD Mono
   (rev 6).
-- **Work** — nine slots (rev 33), 16:9, 3/2/1-col rhythm, **mac-window cards**
-  (rounded tone-step frame, three-dot title bar, no borders); since rev 32
-  the list is entirely the client's real video works, newest first: every
+- **Work** — Video/Images tabs under the header (rev 34; active tab a flat
+  ink chip, `aria-pressed`), 16:9, 3/2/1-col rhythm, **mac-window cards**
+  (rounded tone-step frame, three-dot title bar, no borders). **Video tab:**
+  nine slots (rev 33) of the client's real video works, newest first: every
   entry carries `videoUrl` (YouTube deep link to the named timestamp),
   `video` + `poster` (a self-hosted 30-second clip cut from that moment)
   and structured `credits` — the card autoplays the clip muted + looped,
-  in full colour since rev 33 (client's explicit request; the `<img>`
-  fallback branches keep their grayscale but render nowhere today), with
-  a `VIDEO` micro-tag, and the lightbox plays it too, with the credit
-  roll (client's exact `Role : Names` spacing; names with a URL render as
-  external links) plus a **WATCH ON YOUTUBE ↗** deep link. New in rev 33:
-  "Jane Doe" (Limina Alteri & HiyoriMokami cover; 7 credit roles) and
-  "mosi mosi?" (Karissa Sharlotte cover; 5 credit roles), prepended at
-  the top. `Works` microlabel in VCR OSD Mono again, pulled tighter
+  in full colour since rev 33 (client's explicit request), with a `VIDEO`
+  micro-tag; the lightbox plays it too, with the credit roll (client's
+  exact `Role : Names` spacing; names with a URL render as external
+  links) plus a **WATCH ON YOUTUBE ↗** deep link. Newest: "Jane Doe"
+  (Limina Alteri & HiyoriMokami cover) and "mosi mosi?" (Karissa
+  Sharlotte cover), rev 33. **Images tab:** six slots (rev 34) — the
+  original grayscale character studies (`imageWorks`: `{ id, title,
+  image, description }`), placeholders for the client's real artwork;
+  no micro-tag, and the image lightbox shows title + note only.
+  Switching tabs crossfades the grid (AnimatePresence, reduced-motion
+  safe). `Works` microlabel in VCR OSD Mono again, pulled tighter
   (`-mt-3`) under the wordmark (rev 29; Aurix rev 28, VCR rev 11); card
   titles + lightbox title/credits in VCR OSD Mono (rev 12); **accessible
   lightbox** (ESC + backdrop close, focus trap, focus restored, same
@@ -1525,7 +1563,7 @@ file):
 | What | Where |
 |---|---|
 | 9 real video works (rev 33): title, YouTube deep link, linked credits, 30-s colour clip + poster | `src/data/portfolio.js` → `works`; clips at `public/videos/*.mp4` + `*.jpg` |
-| Placeholder work images (nothing renders them since rev 32) | `public/images/works/work-01..06.png` + `dreamseeker.jpg` stay on disk, unused (originals as SVG in `art/`) |
+| Images tab (rev 34): 6 character studies — `{ id, title, image, description }` | `src/data/portfolio.js` → `imageWorks`; images at `public/images/works/work-01..06.png` (1600×900; `dreamseeker.jpg` still unused) |
 | Work titles + credits | `src/data/portfolio.js` → `works` |
 | Nav labels (top bar + overlay) | `src/data/portfolio.js` → `navSections` (top bar), `sections` (overlay) |
 | Email + social URLs (X, Instagram, VGen) — **real accounts since rev 13**: `sayhitomamuu@gmail.com`, `x.com/mamsenpai`, `instagram.com/mamsenpai`, `vgen.co/mamsenpai` | `src/data/portfolio.js` → `socialLinks` |
@@ -1549,8 +1587,9 @@ mamuu-portofolio/
 ├── public/videos/             ← the real works as self-hosted 30-s clips
 │                                (720p H.264, silent) + poster JPGs: 18 files
 │                                ≈ 38 MB since rev 33, in colour since rev 33
-├── public/images/works/       ← unused since rev 32: work-01..06.png placeholders
-│                                (1600×900) + dreamseeker.jpg MV still (1280×720)
+├── public/images/works/       ← Images tab (rev 34): work-01..06.png character
+│                                studies (1600×900, grayscale); dreamseeker.jpg
+│                                MV still (1280×720) still unused
 ├── public/images/logo/        ← mamuu-logo-black.svg (rev 14 static logo fallback; rev 16 adds マムー with embedded font)
 ├── public/images/about/       ← mamuu-oc.svg (rev 30: the client's own OC line art, full-screen About backdrop)
 ├── public/favicon.svg         (black bg, white m)
@@ -1577,7 +1616,8 @@ mamuu-portofolio/
 │   │   └── ThreeVisual.jsx    ← rev 28 menu star: home-proportioned six-point silhouette (SPIKE 3.2 / SIDE 1.95 / INNER 0.85, jitter) as full-bleed slanted fine-dashed line-wireframe, lines fined to the home star's faint reading (scale 2.4 at both widths — the home star's size, spikes run past the edges) — 4 counter-rotating echoes of one shared EdgesGeometry whose corners pulse at random (6 clocks, ±15%), dust field; posed frame for reduced motion + flat SVG fallback; full disposal incl. mote texture (lazy; three in main bundle)
 │   └── sections/
 │       ├── HomeSection.jsx    (rev 20: client SVG logo intro — circle at centre grows to medium → swells into stardust + drifts left → glyphs + マムー rise from behind sliding right, sized down + Y2K star backdrop + black round wave socials)
-│       ├── WorkSection.jsx    (centred MAMUU + VCR `Works` label pulled tight, 7 mac-window cards)
+│       ├── WorkSection.jsx    (centred MAMUU + VCR `Works` label; Video/Images tabs
+│       │                        with a flat ink chip for the active one, rev 34)
 │       ├── AboutSection.jsx   (client OC line art as full-screen 15%-opacity backdrop, centred VCR prose over it, sentence stagger, no dot/tagline)
 │       └── ContactSection.jsx (one viewport, all-VCR text except the display headline; footer mamuu-work)
 └── .taste-skill/              ← inspect/ screenshots + report.json; menu/ overlay shots
@@ -1593,16 +1633,18 @@ Deleted earlier: `src/lib/scrollTo.js`, `src/components/CharacterPortrait.jsx`.
   it renders the settled lockup immediately (`applyFinal()`), and on error
   or missing WebGL it falls back to the static
   `public/images/logo/mamuu-logo-black.svg`.
-- The Work page is fully real since rev 32: all nine slots (rev 33) are
+- The Work page is fully real since rev 32: all nine Video-tab slots are
   the client's own video works (MV credit `mamsenpai`/`mamuu` on every
   one), each playing a self-hosted 30-second clip cut from the YouTube
   video the client named — self-hosting the creator's own content, audio
   stripped for the silent loop. The clips run in **full colour** since
   rev 33 — the client's explicit request ("tidak hitam putih") and the
   deliberate exception to the monochrome house style, same as the home
-  social circles. Budget note: 18 static files ≈ 38 MB ship under
-  `public/videos/`. Placeholder art and the rev 31 MV still remain on disk
-  but render nowhere. Social URLs and the email are the client's real
+  social circles. The Images tab (rev 34) still shows the six rev 8
+  placeholder character studies with sample titles/notes — swap in the
+  client's real artwork before launch. Budget note: 18 static video
+  files ≈ 38 MB ship under `public/videos/`. The rev 31 MV still remains
+  on disk, unused. Social URLs and the email are the client's real
   accounts since rev 13 (`src/data/portfolio.js` → `socialLinks`).
 - Do not add borders to the window frames — the chrome is tone-step based on
   purpose (`lint.mjs` `hairline` and `inspect.mjs` `outlined-box` both fail on

@@ -171,6 +171,19 @@ export const works = [
   },
 ];
 
+// Images tab (rev 34). Placeholder gallery until real artwork arrives:
+// the six original character studies (rev 8 art, grayscale 1600×900),
+// restored from the pre-rev-32 list. Titles + notes are samples — swap
+// with the client's real pieces.
+export const imageWorks = [
+  { id: "little-parade", title: "Little parade", image: "/images/works/work-01.png", description: "Character study — parade poster." },
+  { id: "sun-study", title: "Sun study", image: "/images/works/work-02.png", description: "Character study — sticker sheet." },
+  { id: "plant-friend", title: "Plant friend", image: "/images/works/work-03.png", description: "Character study — riso print." },
+  { id: "bath-time", title: "Bath time", image: "/images/works/work-04.png", description: "Character study — zine spread." },
+  { id: "rainy-window", title: "Rainy window", image: "/images/works/work-05.png", description: "Character study — palette study." },
+  { id: "three-creatures", title: "Three creatures", image: "/images/works/work-06.png", description: "Character study — pattern tile." },
+];
+
 // Primary navigation.
 export const sections = [
   { id: "home", label: "HOME" },

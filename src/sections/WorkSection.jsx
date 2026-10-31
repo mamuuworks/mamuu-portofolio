@@ -1,15 +1,24 @@
 import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import ArtworkCard from "../components/ArtworkCard.jsx";
 import ArtworkLightbox from "../components/ArtworkLightbox.jsx";
 import ScrambleText from "../components/ScrambleText.jsx";
-import { works, portfolio } from "../data/portfolio.js";
+import { imageWorks, portfolio, works } from "../data/portfolio.js";
+
+const TABS = [
+  { id: "video", label: "Video" },
+  { id: "images", label: "Images" },
+];
 
 /**
  * WORK — the wordmark returns huge, centred above the grid;
- * six mac-style window slots, three columns on desktop.
+ * Video/Images tabs switch what the grid holds (rev 34).
  */
 export default function WorkSection() {
+  const [tab, setTab] = useState("video");
   const [active, setActive] = useState(null);
+  const reduced = useReducedMotion();
+  const items = tab === "video" ? works : imageWorks;
 
   return (
     <section id="work" aria-labelledby="works-title" className="page-pad py-24 md:py-36">
@@ -29,13 +38,42 @@ export default function WorkSection() {
         >
           <ScrambleText text="Works" delay={1100} />
         </p>
+
+        {/* Video / Images tabs (rev 34) — flat fill for the active one */}
+        <div className="mt-8 flex gap-2" role="group" aria-label="Work type">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              aria-pressed={tab === t.id}
+              onClick={() => {
+                setTab(t.id);
+                setActive(null);
+              }}
+              className={`px-4 py-2 font-vcr text-base transition-colors duration-300 ${
+                tab === t.id ? "bg-ink text-canvas" : "text-mute hover:text-ink"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-7 lg:grid-cols-3">
-        {works.map((work, i) => (
-          <ArtworkCard key={work.id} work={work} index={i} onOpen={setActive} />
-        ))}
-      </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={tab}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: reduced ? 0 : 0.25, ease: "easeOut" }}
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-7 lg:grid-cols-3"
+        >
+          {items.map((work, i) => (
+            <ArtworkCard key={work.id} work={work} index={i} onOpen={setActive} />
+          ))}
+        </motion.div>
+      </AnimatePresence>
 
       <ArtworkLightbox work={active} onClose={() => setActive(null)} />
     </section>
