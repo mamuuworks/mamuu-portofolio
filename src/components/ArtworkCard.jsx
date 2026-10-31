@@ -26,15 +26,31 @@ export default function ArtworkCard({ work, index, onOpen }) {
             <span className="h-2.5 w-2.5 rounded-full bg-mute/40" />
             <span className="h-2.5 w-2.5 rounded-full bg-mute/40" />
             <span className="h-2.5 w-2.5 rounded-full bg-mute/40" />
+            {work.videoUrl && (
+              <span className="ml-auto font-vcr text-[10px] tracking-[0.14em] text-ink/70">Video</span>
+            )}
           </span>
           <span className="block aspect-video w-full overflow-hidden bg-surface">
-            {work.image ? (
+            {work.video ? (
+              <video
+                src={work.video}
+                poster={work.poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                tabIndex={-1}
+                aria-hidden="true"
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]"
+              />
+            ) : work.image ? (
               <img
                 src={work.image}
                 alt={work.title}
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]"
+                className="h-full w-full object-cover grayscale transition-transform duration-500 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]"
               />
             ) : (
               <WorksArt
@@ -50,7 +66,7 @@ export default function ArtworkCard({ work, index, onOpen }) {
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-3 left-3 translate-y-2 bg-canvas px-3 py-1.5 font-vcr text-sm font-medium opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
+          className="pointer-events-none absolute bottom-3 left-3 max-w-[calc(100%-1.5rem)] translate-y-2 bg-canvas px-3 py-1.5 font-vcr text-base font-medium leading-snug opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
         >
           {work.title}
         </span>

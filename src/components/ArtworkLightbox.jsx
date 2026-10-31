@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { X } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import WorksArt from "./WorksArt.jsx";
 
 /**
@@ -84,15 +84,71 @@ function Lightbox({ work, onClose }) {
           </button>
         </div>
         <div className="aspect-video w-full overflow-hidden bg-surface">
-          {work.image ? (
-            <img src={work.image} alt={work.title} className="h-full w-full object-cover" />
+          {work.video ? (
+            <video
+              src={work.video}
+              poster={work.poster}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="h-full w-full object-cover"
+            />
+          ) : work.image ? (
+            <img src={work.image} alt={work.title} className="h-full w-full object-cover grayscale" />
           ) : (
             <WorksArt art={work.art} label={`${work.title} — placeholder artwork`} className="h-full w-full" />
           )}
         </div>
-        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 px-5 py-4 md:px-7 md:py-5">
-          <h3 className="font-vcr text-xl tracking-[-0.01em] md:text-2xl">{work.title}</h3>
-          <p className="max-w-md font-vcr text-sm leading-relaxed text-mute">{work.description}</p>
+        <div className="flex flex-wrap items-start justify-between gap-x-8 gap-y-3 px-5 py-4 md:px-7 md:py-5">
+          <div className="flex flex-col">
+            <h3 className="font-vcr text-xl tracking-[-0.01em] md:text-2xl">{work.title}</h3>
+            {work.videoUrl && (
+              <a
+                href={work.videoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex items-center gap-1 font-vcr text-sm text-ink underline decoration-line underline-offset-4 transition-colors duration-300 hover:text-accent"
+              >
+                Watch on YouTube
+                <ArrowUpRight size={15} strokeWidth={1.8} aria-hidden="true" />
+              </a>
+            )}
+          </div>
+          {work.credits ? (
+            <ul className="max-w-md space-y-0.5 font-vcr text-sm leading-relaxed">
+              {work.credits.map(([role, names]) => (
+                <li key={role}>
+                  <span className="text-ink">{role}</span>
+                  <span className="text-mute">
+                    {" : "}
+                    {names.map((person, i) => (
+                      <Fragment key={person.name}>
+                        {i > 0 && ", "}
+                        {person.url ? (
+                          <a
+                            href={person.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline decoration-line underline-offset-4 transition-colors duration-300 hover:text-accent"
+                          >
+                            {person.name}
+                          </a>
+                        ) : (
+                          person.name
+                        )}
+                      </Fragment>
+                    ))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="max-w-md font-vcr text-sm leading-relaxed text-mute">{work.description}</p>
+          )}
         </div>
       </motion.div>
     </motion.div>
