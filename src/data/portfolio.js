@@ -169,6 +169,14 @@ export const works = [
       ["MV", [{ name: "mamuu", url: "https://x.com/mamsenpai" }]],
     ],
   },
+  {
+    id: "Test ilmu",
+    title: "Test ilmu",
+    videoUrl: "",
+    video: "/videos/TEST-ILMU.mp4",
+    poster: "",
+    credits: [],
+  },
 ];
 
 // Primary navigation.
