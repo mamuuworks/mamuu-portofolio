@@ -36,7 +36,7 @@ export default function ContactSection() {
           className="font-vcr mt-6 max-w-md text-lg leading-relaxed"
         >
           <ScrambleText
-            text="Commissions, questions, or just saying hi — every door is open."
+            text="Commissions, questions, or just saying hi every door is open."
             delay={550}
           />
         </motion.p>
