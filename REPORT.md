@@ -12,7 +12,373 @@ npm run preview  # port 4199 in this environment
 
 ---
 
-## 0. Revision 20 — the circle stops at MEDIUM and transforms into the stardust directly, quicker still (client request)
+## 0. Revision 27 — the menu star grows to the home star's size: full-bleed at every width (client request)
+
+The client asked for the menu's 3D to be enlarged again, **as big as the
+home page's star**. The home star reads at a fixed apparent size: SPIKE
+5.1 at camera z 7.2 (fov 42) ≈ 1.85× the half-height of the viewport —
+its spikes run past all four edges. The menu figure now matches that
+reading exactly:
+
+- **One scale, both widths: 2.4** (from desktop 1.16 / phone 0.92) —
+  the menu silhouette (SPIKE 3.2) at this scale spans ≈ 1.93× the
+  half-height, the same size class as the home star. The camera stays at
+  z 10.4 and the placement, slant and composition are untouched; only
+  the figure scale changed. The home star never shrinks on a phone, so
+  the menu star no longer does either: **the scale is identical at both
+  widths**, and the spikes run past the screen edges on desktop and
+  phone alike, at rest — not only at a pulse peak. Full-bleed is now the
+  resting state, matching the home page.
+- **Everything else kept** — the dashed line-wireframe family (no solid
+  fills, the menu stays the line companion of the home's solid star),
+  the six random corner clocks (±15%), the stardust field (rev 26's
+  wider spread), the held slant with sway, breathing, pointer tilt,
+  reduced-motion posed frame and flat SVG fallback. The nav links ride
+  on top and stay legible.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — `scaleNow` 2.4 at both widths,
+  docblock updated (rev 27).
+
+### Gate
+
+`npm run build` ✓ (6.8 s; `ThreeVisual` lazy chunk **5216 B ≈ 5.1 KB**,
+`ThreeVisual-r0N7QGPd.js`). lint **0 FAIL · 1 WARN** (em-dash,
+pre-existing). inspect home **0 FAIL · 5 WARN** (`--allow
+mono,few-pictures`). Menu re-screenshot-verified at 1440×900 and
+390×844 and compared side-by-side with the home page's own screenshot:
+the menu star now reads at the home star's size — body filling the
+centre, spikes exiting all edges on both widths — with the links fully
+legible on top; the late frame still shows the corners at different
+random lengths; console clean.
+
+---
+
+## 0a. Revision 26 — the menu star enlarged again: scale up at both widths, spikes may kiss the edges at a pulse peak (client request)
+
+The client asked for the menu's 3D to be **bigger again**. Rev 25's near
+full-bleed figure grows once more, without touching the verified camera
+frame:
+
+- **Scale up at every width** — desktop 1.05 → **1.16** (+10%), phone
+  0.82 → **0.92** (+12%). The camera stays at z 10.4 (its frame was
+  verified across rev 25's two screenshots); the growth is pure figure
+  scale, so the composition, slant and placement (desktop `x +1.2, y
+  +0.1`, phone `x 0, y +0.25`) are unchanged. On desktop the star now
+  spans roughly 85–90% of the viewport height at rest; at a pulse peak
+  the longest spike runs past the screen edge — the deliberate
+  full-bleed reading of "nearly fills the screen" (the same behaviour
+  the phone's side points have had since rev 25). On the phone the star
+  fills the screen even more, side points still running off the edges,
+  links riding on top.
+- **Dust follows the bigger canvas** — the stardust field spreads wider
+  again (`6.2 × 3.3`, from 5.6 × 3.0).
+- **Everything else kept** — the dashed line-wireframe family, the home
+  star's proportions, the six random corner clocks (±15%), the held
+  slant with sway, breathing, pointer tilt, reduced-motion posed frame
+  and flat SVG fallback.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — `scaleNow` 0.92/1.16, dust spread,
+  docblock updated (rev 26).
+
+### Gate
+
+`npm run build` ✓ (4.8 s; `ThreeVisual` lazy chunk now **5223 B ≈ 5.1 KB**,
+`ThreeVisual-BYQ5M6ar.js`). lint **0 FAIL · 1 WARN** (em-dash,
+pre-existing). inspect home **0 FAIL · 5 WARN** (`--allow
+mono,few-pictures`). Menu re-screenshot-verified at 1440×900 and 390×844:
+desktop at rest spans ~85–90% of the height (top spike ~90/900, bottom
+~855/900), the late frame catches a pulse peak with the bottom spike
+running past the edge (full-bleed, links still fully legible), corner
+lengths differ frame to frame, phone full-bleed kept, console clean.
+
+---
+
+## 0b. Revision 25 — the menu star becomes a near full-screen background at every width, its corners pulsing at random (client request)
+
+The client asked for the menu's 3D to become a **background that nearly
+fills the screen** — **never shrinking on a phone**, still the background
+there — and for **every corner to shrink and grow at random**. The rev 24
+half-page placement gives way to a near full-bleed figure:
+
+- **Near full-screen at both widths** — the camera pulls back
+  (z 8.9 → 10.4) and the figure grows (desktop scale 1.05, phone 0.82 —
+  the phone had sat at 0.6–0.72 before): the star spans roughly 80–90% of
+  the viewport height on desktop, and on a phone it fills the screen with
+  the side points running off the edges — a full-bleed background the
+  links ride on top of. The menu links therefore return to centre on
+  mobile (rev 24's lower-half placement is undone); the bold VCR OSD Mono
+  links stay legible over the thin dashed lines.
+- **Random corner pulses** — six independent clocks (two superimposed
+  sines each, random speeds `0.45–0.85` and `1.05–1.65` rad·s⁻¹ and random
+  phases) drive each corner's length around its resting size (±15%,
+  `PULSE`). Per frame, every vertex of the **shared** wireframe is
+  re-scaled by the pulse of its nearest corner with a smooth falloff
+  (full at a corner tip, none in a valley — the valleys stay still), so
+  all four echoes breathe together while counter-rotating reads the pulses
+  at four different angles. Dash distances recomputed each frame.
+- **Everything else kept** — the dashed line-wireframe family (no solid
+  fills), the home star's proportions (SPIKE 3.2 / SIDE 1.95 / INNER 0.85
+  with jitter), the held slant `−0.16` with slow sway, the x lean and
+  pointer tilt, breathing scale, the dust field spread wider
+  (`5.6 × 3.0`) for the bigger canvas, the posed-frame reduced-motion
+  fallback (corners frozen at varied sizes) and the flat SVG fallback.
+- **Placement** — desktop `x +1.2, y +0.1` (in from rev 24's +2.0 — the
+  links keep the left, the star owns nearly everything else); phone
+  `x 0, y +0.25`.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — camera z, figure placement/scale,
+  `PULSE`/`pulseDefs`/`cornerScale`/`applyCorners` (shared-geometry
+  corner pulses), dust spread; docblock updated.
+- `src/components/MenuOverlay.jsx` — docblock updated; mobile nav back to
+  centred (links ride on the full-bleed star).
+
+### Gate
+
+`npm run build` ✓ (2.9–3.65 s; `ThreeVisual` lazy chunk 5221 B ≈ 5.1 KB,
+`ThreeVisual-Ir-gjK0K.js`, main bundle ~822 KB — Three.js in main since
+rev 14, documented). lint **0 FAIL · 1 WARN** (em-dash, pre-existing).
+inspect home **0 FAIL · 5 WARN** (`--allow mono,few-pictures` — same
+defended set). Menu re-screenshot-verified via `/?menu=1#/` at 1440×900
+and 390×844 across **two iterations** (first cut scale 1.0 / 0.78 — grown
+after; corner pulses verified across two settle times: corner lengths
+differ frame to frame, valleys still, no top/bottom clipping — desktop
+spike ends ~870/900, phone side points intentionally full-bleed), links
+legible over the lines at both widths, console clean.
+
+---
+
+## 0c. Revision 24 — the menu's geometry returns to lines only, shaped as the home star, slanted, filling half the page (client request)
+
+The client asked for the menu geometry to go back to **lines only, like
+before** — but now shaped as the **home page's six-pointed star** (the top
+and bottom spikes run longer than the four side points), **slanted**, and
+enlarged to fill **about half of the menu page — on mobile just the same**.
+The rev 23 solid waving star is replaced by a **dashed line-wireframe
+family**; no solid fills anywhere:
+
+- **The home star's proportions** — the twelve-vertex outline
+  (`starLineShape`) uses the home star's figure: top/bottom spikes
+  (vertices on the y axis, `|cos angle| < 0.35`) at SPIKE 3.2, side points
+  at SIDE 1.95, inner valleys at INNER 0.85, with a small per-vertex jitter
+  (`sin(i·2.3 + 1.1)·0.035`) so the silhouette stays its own.
+- **Lines from a solid, used once** — the outline is extruded (depth 0.5,
+  bevel 0.06) and reduced to its sharp edges (`EdgesGeometry`, 14°); the
+  solid is disposed immediately and **one shared wireframe geometry serves
+  every echo**.
+- **Four dashed echoes** (`LineDashedMaterial`,
+  `computeLineDistances`, `frustumCulled = false`) at scales
+  1.0 / 0.84 / 0.68 / 0.5, three ink + one deepest-gray `#a3a3a3`, opacities
+  0.85 / 0.5 / 0.35 / 0.55, dash arrays `[0.2, 0.12] / [0.12, 0.16] /
+  [0.26, 0.18] / [0.14, 0.14]`, each counter-rotating on its own clock
+  (+0.05 / −0.08 / +0.11 / −0.14 rad·s⁻¹, phases 0 / 2.1 / 4.2 / 1.0) at
+  depths z 0 / −0.35 / −0.7 / −1.05.
+- **The slant, held** — the whole figure holds `rotation.z = −0.16` (with a
+  slow sway `sin(t·0.35)·0.06`), leans in x (`−0.42 + py·0.14`) and tilts
+  with the pointer (`rotation.y = px·0.3`); breathing scale 1 ± 0.012
+  non-uniform y (the mobile scale factors into **both** the initial
+  `setScalar` and the breathe line — the rev 23 lesson).
+- **The dust field stays** — 150 (90 on a phone) light motes `#d3d4d4`
+  behind the figure, opacity pulsing, slow rotation — the stardust family
+  tie.
+- **Placement** — desktop right of centre (`x +2.0`, `y +0.3` — raised from
+  +0.2 after the bottom spike touched the viewport edge at 893/900, camera
+  z 8.9) filling the right half; phone top half (`scale 0.6`, `y +1.45`) —
+  the star owns the upper half and the links were **pushed into the lower
+  half** (`MenuOverlay` nav: `justify-center` →
+  `justify-end gap-3 pb-6 md:gap-5 md:justify-center md:pb-0`), so the
+  background takes half the menu page at both widths as asked.
+- **Fallbacks** — reduced motion renders one posed frame
+  (`renderFrame(2.4)`, echoes askew, dust mid-drift); WebGL failure draws a
+  flat SVG of the same four dashed star outlines (same jitter function,
+  group rotated `−9°`) with dust dots; everything is disposed on unmount.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — rewritten: `starLineShape` /
+  `starWireframe` + four dashed counter-rotating echoes replace the rev 23
+  solid waving star and ghost; static SVG fallback redrawn as dashed
+  outlines.
+- `src/components/MenuOverlay.jsx` — docblock updated; nav classes changed
+  on mobile (links pushed to the lower half).
+
+### Gate
+
+`npm run build` ✓ (2.38–2.45 s; `ThreeVisual` lazy chunk 4537 B ≈ 4.5 KB,
+`ThreeVisual-Cy239EXv.js`, main bundle ~822 KB — Three.js in main since
+rev 14, documented). lint **0 FAIL · 1 WARN** (em-dash, pre-existing).
+inspect home **0 FAIL · 5 WARN** (`--allow mono,few-pictures` — same
+defended set as before). Menu re-screenshot-verified via `/?menu=1#/` at
+1440×900 and 390×844 across **three fix iterations**: first cut overlapped
+every phone link and clipped the top spike (fixed by SPIKE 3.3→3.2, mobile
+scale 0.72→0.6, y +1.45, nav pushed low); then the desktop bottom spike
+touched the viewport edge (fixed by y +0.2→+0.3). Final: slanted dashed
+star fills the right half with top/bottom clearance, echoes
+counter-rotate across two settle times, phone star owns the top half with
+HOME/WORK/ABOUT/CONTACT legible below, console clean.
+
+---
+
+## 0d. Revision 23 — the menu's star becomes solid 3D like the home page, bigger, waving (client request)
+
+The client asked for the menu's star to become **abstract geometry like the
+home page's, bigger, with an abstract 3D wave motion**. The rev 22 dashed
+mandala is replaced by a **solid waving star**:
+
+- **Extruded solid hexagram** — the home star's figure family
+  (`ExtrudeGeometry`, bevelled, depth 0.5), enlarged to R 2.7 (the mandala's
+  outer echo was 2.75 but of hairline rings; this is a full solid mass).
+  Per-point radius jitter (`sin(i·2.3 + 1.1)·0.04`) keeps the silhouette its
+  own — never an exact copy of the home star.
+- **The travelling wave** — every vertex ripples outward each frame
+  (`applyWave`): two superimposed sine fields (fast/short `d·1.5 − t·2.0`
+  amp 0.15, slow/long `d·0.85 − t·1.25` amp 0.09) displace z lagging with
+  radius, and a gentle radial pulse (`d·1.15 − t·1.4`, ±3.5%) breathes the
+  silhouette — swellings travel through the star's body like water. Normals
+  untouched (basic material), meshes `frustumCulled = false` since the wave
+  pushes vertices past the resting bounds.
+- **Counter-phase ghost** — the same silhouette in `#a3a3a3` at 0.3,
+  offset back and up-left (`−0.28, +0.22, −0.55`), waving deeper (`×1.5`)
+  on a shifted clock (`t + 1.9`) — depth without any line or shadow.
+- **Motion** — pointer tilt (`rotation.y ± 0.3`, `rotation.x −0.22 +
+  py·0.16`), a slow abstract sway (`rotation.z = sin(t·0.35)·0.07`),
+  breathing scale 1 ± 0.015 non-uniform y, and the rev 22 dust field
+  (150 light motes `#d3d4d4`, z −0.6…−1.4) kept as the stardust family tie.
+- **Placement** — desktop right of centre (`x +2.0`, `y +0.05`, camera
+  z 8.9) filling the right half; phone higher and smaller (`scale 0.42`,
+  `y +2.05`) so the solid ink figure never sits behind the ink links.
+- **Fallbacks unchanged** — reduced motion renders one posed frame
+  (wave mid-travel, ghost askew); WebGL failure draws a flat SVG of the
+  same wavy star (ink polygon + offset gray ghost + dust dots); everything
+  (geometries, materials, mote texture, renderer) is disposed on unmount.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — rewritten: extruded waving star +
+  counter-phase ghost + dust field replace the rev 22 dashed mandala;
+  `starShape`/`wavyStarGeometry`/`applyWave` helpers; docblock + static
+  fallback updated.
+- `src/components/MenuOverlay.jsx` — docblock only.
+
+### Gate
+
+`npm run build` ✓ (4.31–5.56 s; `ThreeVisual` lazy chunk 4.4 KB, main
+bundle ~822 KB — Three.js in main since rev 14, documented). lint **0
+FAIL · 1 WARN** (em-dash, pre-existing). inspect home **0 FAIL · 5 WARN**
+(`--allow mono,few-pictures` — same defended set as rev 22). Menu
+re-screenshot-verified via `/?menu=1#/` at 1440×900 and 390×844: solid
+waving star fills the right half, wave verified across two settle times
+(silhouette bends shift), ghost visible, phone star fully above the links
+(first cut overlapped HOME — fixed by scale 0.42 / y +2.05), no edge
+clipping (first cut bled off top/bottom — fixed by R 2.7 / camera z 8.9),
+console clean.
+
+---
+
+## 0e. Revision 22 — the menu becomes a six-pointed star again, as an abstract hexagram mandala (client request)
+
+The client asked for the menu's 3D to be a **six-pointed star like the home
+page — but not too similar: a unique abstract variation**. The rev 21 spiral
+galaxy is replaced by a **hexagram mandala**: the home star's six points
+echoed as geometry instead of extruded morphing silhouette.
+
+- **Four concentric hexagram echoes** — 12-vertex (six-point) star rings as
+  `THREE.LineLoop` dashed lines (lightest outside → ink at the heart:
+  `#a3a3a3` 0.5 → `#737373` 0.62 → `#525252` 0.78 → `#111111` 0.9), radii
+  2.75 / 2.15 / 1.58 / 1.05. Each ring jitters its radii per-vertex
+  (`Math.sin(i·2.7 + seed·1.9)·0.05`) so the echoes never repeat each other
+  exactly — the abstraction.
+- **Counter-rotation** — the rings turn at ±0.055 / 0.075 / 0.1 / 0.135, so
+  their dashes keep slipping in and out of alignment: a slow abstract
+  shimmer, not one rigid figure.
+- **Stardust on the points** — round motes (the same soft radial sprite as
+  rev 21) sit on the outer points of the outermost and third rings.
+- **Solid heart** — a mini-star (R 0.5) fills the centre, triangulated as a
+  fan from an added centre vertex so the concave silhouette renders clean.
+- **Dust field behind** — ~150 light motes (`#d3d4d4`, z −0.6…−1.4), the
+  stardust family tie to the home intro, slowly drifting.
+- **Motion** — the whole mandala breathes (scale 1 ± 0.02, non-uniform y)
+  and tilts with the pointer (`rotation.y ± 0.3`, `rotation.x −0.3 +
+  py·0.18`), as the blob and the galaxy did before it.
+- **Placement unchanged** — right of centre on desktop (`x +2.3`,
+  `y +0.15`), higher and smaller on a phone (`scale 0.8`, `y +1.1`).
+- **Fallbacks unchanged** — reduced motion renders one posed frame; WebGL
+  failure draws a flat SVG of the same mandala (four dashed polygons +
+  solid heart); everything (geometries, materials, mote texture, renderer)
+  is disposed on unmount.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — rewritten: dashed hexagram echoes +
+  solid fan-triangulated heart + mote/dust points replace the rev 21
+  galaxy clouds and comet; docblock + static fallback updated.
+- `src/components/MenuOverlay.jsx` — docblock only.
+
+### Gate
+
+`npm run build` ✓ (4.38 s; `ThreeVisual` lazy chunk 5.2 KB, main bundle
+~822 KB — Three.js in main since rev 14, documented). lint **0 FAIL ·
+1 WARN** (em-dash, pre-existing). inspect home **0 FAIL · 5 WARN**
+(`--allow mono,few-pictures` — same defended set as rev 21). Menu
+re-screenshot-verified via `/?menu=1#/` at 1440×900 and 390×844: mandala
+renders, counter-rotated echoes verified across two settle times (dash
+alignment shifts), solid heart clean, no overlap with the links, console
+clean.
+
+---
+
+## 0f. Revision 21 — the menu's 3D geometry becomes its own stardust variation (client request)
+
+The client asked for the menu page's Three.js geometry to be replaced with
+**stardust like the home intro — but not a copy: a unique variation**. The
+wireframe icosahedron blob + satellite dot are gone. The menu now carries a
+**slow spiral galaxy of dust**:
+
+- **Three kinds of cloud, one galaxy** — a dense dark **core** (ink
+  `#111111`, ~280 motes), two counter-rotating **spiral arms** winding out
+  of it (accent/mute grays, ~430 motes each) and a sparse lighter **halo**
+  (`#a3a3a3`/`#d3d4d4`, ~290 motes) — round soft-sprite motes, never
+  squares, strictly monochrome on the white canvas.
+- **Motion** — the whole disc turns slowly (`t · 0.05`), the arms shear
+  against it (`±0.035–0.045`), every cloud **twinkles** (its opacity
+  breathes on its own phase), the disc is seen from slightly above
+  (`rotation.x −0.55`) and tilts with the pointer like the old blob did.
+- **Shooting star** — every 4–8 s a tiny **comet** (round dark head +
+  tapered triangular gray tail, never a straight hairline rule) crosses the
+  field on a descending diagonal inside the galaxy's neighbourhood, fading
+  in and out (`sin(π·p)`).
+- **Placement** — the links column owns the left half, so the galaxy sits
+  right of centre on desktop (`x +2.3`) and hovers higher and smaller on a
+  phone (`scale 0.78`, `y +1.1`).
+- **Fallbacks** — reduced motion renders one posed frame; WebGL failure
+  draws a flat SVG of the same field (scattered gray circles + comet);
+  everything (geometry, materials, mote texture, renderer) is disposed on
+  unmount as before.
+
+### Files
+
+- `src/components/ThreeVisual.jsx` — rewritten: Points clouds + comet group
+  replace the distorted icosahedron and satellite; `makeMoteTexture`
+  (canvas radial sprite); docblock + static fallback updated.
+- `src/components/MenuOverlay.jsx` — docblock only.
+
+### Gate
+
+`npm run build` ✓ (3.42 s). lint **0 FAIL · 1 WARN** (em-dash,
+pre-existing). inspect home **0 FAIL · 5 WARN** (`--allow mono,few-pictures`
+— same defended set as rev 20). Menu re-screenshot-verified via `?menu=1`
+(the deep link is a real query: `/?menu=1#/`) at 1440×900 and 390×844:
+galaxy behind the links, no hairline artifacts, comet verified mid-flight
+(head + taper), mobile galaxy above the links, console clean.
+
+---
+
+## 0g. Revision 20 — the circle stops at MEDIUM and transforms into the stardust directly, quicker still (client request)
 
 The client reviewed rev 19's intro with two changes: the black circle
 should **never reach full size** — it becomes **medium**, then transforms
@@ -60,7 +426,7 @@ landed, settled identical to rev 19's lockup. Mobile settled correct.
 
 ---
 
-## 0a. Revision 19 — the circle grows INTO the stardust (centre → left), text emerges from behind it to the right, quicker (client request)
+## 0h. Revision 19 — the circle grows INTO the stardust (centre → left), text emerges from behind it to the right, quicker (client request)
 
 The client reviewed rev 18's intro with three changes: the circle should
 grow **into** the stardust (not dissolve in place), the speed should not be
@@ -110,7 +476,7 @@ Mobile settled correct.
 
 ---
 
-## 0b. Revision 18 — the circle appears small first, then grows slowly (client request)
+## 0i. Revision 18 — the circle appears small first, then grows slowly (client request)
 
 The client reviewed rev 17's intro and read the entrance as "masih sama
 saja" — the circle still seemed to just pop in at size. The numbers agreed:
@@ -156,7 +522,7 @@ asked: small appears first → slowly grows → stardust.
 
 ---
 
-## 0c. Revision 17 — medium-size circle + マムー in the Aurix-first stack (client request)
+## 0j. Revision 17 — medium-size circle + マムー in the Aurix-first stack (client request)
 
 Two changes to the home intro, both client-requested:
 
@@ -191,7 +557,7 @@ correctly beside the wordmark's end. Fallback SVG unchanged from rev 16.
 
 ---
 
-## 0d. Revision 16 — the circle grows into the stardust + マムー restored (client request)
+## 0k. Revision 16 — the circle grows into the stardust + マムー restored (client request)
 
 Two changes to the home intro, both client-requested:
 
@@ -237,7 +603,7 @@ rendered standalone with the embedded font. Console clean.
 
 ---
 
-## 0e. Revision 15 — smaller logo, circle dissolves into the stardust, new layer order (client request)
+## 0l. Revision 15 — smaller logo, circle dissolves into the stardust, new layer order (client request)
 
 Three changes to the rev 14 intro, all client-requested:
 
@@ -267,7 +633,7 @@ clean.
 
 ---
 
-## 0f. Revision 14 — the client's SVG logo as an animated Three.js home intro (client request)
+## 0m. Revision 14 — the client's SVG logo as an animated Three.js home intro (client request)
 
 The home `MAMUU` wordmark (Aurix + `ScrambleText`, rev 10) is replaced by the
 client's own logo, supplied as `LOGO mamuuu.svg` (viewBox `0 0 1419 854.8`),
@@ -327,7 +693,7 @@ screenshot-verified at 1440×900 and 390×844; console clean.
 
 ---
 
-## 0g. Revision 13 — real contact links + email (client request)
+## 0n. Revision 13 — real contact links + email (client request)
 
 The placeholder destinations in `portfolio.socialLinks` are now the client's
 real accounts, flowing to every consumer (contact pill button `mailto:`,
@@ -347,7 +713,7 @@ WARN** (unchanged list). No visual change expected — hrefs only.
 
 ---
 
-## 0h. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
+## 0o. Revision 12 — calmer menu wordmark + VCR titles on work imagery (client request)
 
 Two follow-ups to rev 11:
 
@@ -375,7 +741,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0i. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
+## 0p. Revision 11 — bigger menu wordmark + Works label in VCR (client request)
 
 Two follow-ups to rev 10:
 
@@ -397,7 +763,7 @@ VCR OSD Mono. Home / about / contact untouched.
 
 ---
 
-## 0j. Revision 10 — Aurix display face for the five wordmarks (client request)
+## 0q. Revision 10 — Aurix display face for the five wordmarks (client request)
 
 Client supplied the Aurix free font and asked that the five headline
 wordmarks switch to it: home `MAMUU`, about `ABOUT ME`, work `MAMUU`,
@@ -426,7 +792,7 @@ Aurix renders on every wordmark, menu links stay in VCR OSD Mono.
 
 ---
 
-## 0k. Revision 9 — alternating spike morph + bigger star (client request)
+## 0r. Revision 9 — alternating spike morph + bigger star (client request)
 
 Two changes to the home backdrop only:
 
@@ -449,7 +815,7 @@ untouched; `HomeSection.jsx` unchanged in this revision.
 
 ---
 
-## 0l. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
+## 0s. Revision 8 — abstract Y2K star + solid-black social buttons (client request)
 
 Four changes to the rev-7 home:
 
@@ -480,7 +846,7 @@ scripted). Work/about/contact untouched.
 
 ---
 
-## 0m. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
+## 0t. Revision 7 — 3D star hero + MAMUU scramble + wave socials (client request)
 
 The home page is rebuilt around one new request: replace the m-wordmark +
 mascot hero with a **3D wireframe six-pointed star** backdrop (same family as
@@ -521,7 +887,7 @@ before); inspect **0 FAIL** on home — 4 WARN (`first-action`,
 
 ---
 
-## 0n. Revision 6 — about/home trim + all-VCR contact (client request)
+## 0u. Revision 6 — about/home trim + all-VCR contact (client request)
 
 Three changes shipped:
 
@@ -542,7 +908,7 @@ about 4 WARN, contact 4 WARN (all defensible, table in §3).
 
 ---
 
-## 0o. Revision 5 — remove all Japanese text (client request)
+## 0v. Revision 5 — remove all Japanese text (client request)
 
 The katakana label (drawn as SVG) is removed everywhere: the floating mark
 next to the home wordmark, both marks in the menu overlay, the
@@ -554,7 +920,7 @@ README no longer reference the label.
 
 ---
 
-## 0p. Revision 4 — VCR OSD Mono + final polish (client request)
+## 0w. Revision 4 — VCR OSD Mono + final polish (client request)
 
 Four changes requested and shipped:
 
@@ -580,7 +946,7 @@ Four changes requested and shipped:
    in `index.css` and `--allow mono` in the inspector runs — the face is a
    client requirement, so it is brand, not a tell.
 
-## 0q. Revision 3 — monochrome + mac-window chrome + scramble (client request)
+## 0x. Revision 3 — monochrome + mac-window chrome + scramble (client request)
 
 Six changes requested and shipped:
 
@@ -631,7 +997,7 @@ Also fixed in this revision:
   (`public/images/works/work-01..06.png`), so the raster assets match the
   monochrome art.
 
-## 0r. Revision 2 — separate pages
+## 0y. Revision 2 — separate pages
 
 Historical (kept for context):
 
@@ -667,8 +1033,18 @@ Mamuu's name is drawn as a creature — an "m" with eyes. The mark recurs:
 2. **Gallery art** — all six placeholder works redrawn around the same creature
    (poster, sticker sheet, riso print, zine spread, palette study, pattern
    tile), grayscale SVG → 1600×900 PNG. No stock imagery anywhere.
-3. **Menu** — the Three.js wireframe blob is the creature enlarged: the visitor
-   steps *inside* it to navigate. Blob dots render gray (`0x525252`).
+3. **Menu** — since rev 27 the geometry is a **full-screen background at
+   the home star's size** of **lines only**, shaped as the home star: the
+   six-pointed silhouette with the home star's proportions (longer
+   top/bottom spikes, SPIKE 3.2 / SIDE 1.95 / INNER 0.85, per-point jitter)
+   drawn as a slanted dashed line-wireframe — four counter-rotating echoes
+   of one shared `EdgesGeometry` (three ink + one deepest-gray), no solid
+   fills — spanning ≈ 1.9× the half-height at every width (the same size
+   class as the home star: spikes run past all four edges at rest, on
+   desktop and phone alike — it never shrinks), with **every corner
+   shrinking/growing at random** (six independent clocks, ±15%, valleys
+   still), the stardust dust field kept, a held slant with a slow sway,
+   breathing and pointer tilt.
 
 Type (rev 4 + rev 10 + rev 12): **VCR OSD Mono** (nav row, menu links, About
 prose, `Works` label, work card titles + lightbox title/description —
@@ -724,7 +1100,8 @@ is currently unused; the file is kept on disk in case the creature returns.
 ### Build
 `npm run build` — **passes**. Main bundle ~821 KB: since rev 14 `LogoIntro`
 imports Three.js directly, so the library now ships in the main chunk
-(`StarVisual` 2.7 KB and `ThreeVisual` 2.5 KB remain lazy thin wrappers).
+(`StarVisual` 2.7 KB and `ThreeVisual` 5216 B ≈ 5.1 KB — the menu dashed
+line star since rev 24/27 — remain lazy chunks).
 The chunk-size warning is expected and accepted.
 
 ### lint.mjs — 0 FAIL · 1 WARN
@@ -782,7 +1159,9 @@ Reviewed after the final build, every listed capture opened:
   row; footer row inside the viewport.
 - **Menu overlay (`?menu=1`, re-verified in rev 4 via CDP with real settle
   time at 1440×900 and 390×844):** HOME · WORK · ABOUT · CONTACT all settled
-  and legible in VCR OSD Mono, gray wireframe blob behind, fully monochrome.
+  and legible in VCR OSD Mono, the full-bleed dashed line-wireframe
+  star behind (rev 27, at the home star's size, corners pulsing at random),
+  fully monochrome.
 - Console clean.
 
 ## 4. Features
@@ -826,7 +1205,10 @@ Reviewed after the final build, every listed capture opened:
 - **Menu overlay** — full-screen; wordmark `MAMUU` in Aurix, compact
   display size (rev 12, down from rev 11's larger cut); the `ThreeVisual`
   wrapper loads lazily on first open (Three.js itself ships in the main
-  bundle since rev 14) and is fully disposed on close; ESC to close; focus
+  bundle since rev 14) and is fully disposed on close; since rev 27 the
+  visual is the full-bleed dashed line-wireframe star family (the
+  home star's proportions, slanted, corners pulsing at random, four
+  counter-rotating echoes); ESC to close; focus
   trap; body scroll locked; reduced-motion and no-WebGL fallbacks; deep link
   `?menu=1`.
 - **ScrambleText** — first-open decode effect on headlines/labels (§2),
@@ -882,8 +1264,8 @@ mamuu-portofolio/
 │   │   ├── WorksArt.jsx       ← grayscale SVG artwork for the six slots
 │   │   ├── Mascot.jsx         ← UNUSED since rev 7 (kept on disk, no imports)
 │   │   ├── SocialLinks.jsx    ← optional `animated` stagger; rev 7 adds rings via className
-│   │   ├── MenuOverlay.jsx    ← HOME/WORK/ABOUT/CONTACT (lazy Three.js, focus trap)
-│   │   └── ThreeVisual.jsx    ← gray wireframe blob, full disposal (lazy wrapper; three in main bundle)
+│   │   ├── MenuOverlay.jsx    ← HOME/WORK/ABOUT/CONTACT (lazy Three.js full-screen line star, focus trap)
+│   │   └── ThreeVisual.jsx    ← rev 27 menu star: home-proportioned six-point silhouette (SPIKE 3.2 / SIDE 1.95 / INNER 0.85, jitter) as full-bleed slanted dashed line-wireframe (scale 2.4 at both widths — the home star's size, spikes run past the edges) — 4 counter-rotating echoes of one shared EdgesGeometry whose corners pulse at random (6 clocks, ±15%), dust field; posed frame for reduced motion + flat SVG fallback; full disposal incl. mote texture (lazy; three in main bundle)
 │   └── sections/
 │       ├── HomeSection.jsx    (rev 20: client SVG logo intro — circle at centre grows to medium → swells into stardust + drifts left → glyphs + マムー rise from behind sliding right, sized down + Y2K star backdrop + black round wave socials)
 │       ├── WorkSection.jsx    (centred MAMUU + Works, 6 mac-window cards)

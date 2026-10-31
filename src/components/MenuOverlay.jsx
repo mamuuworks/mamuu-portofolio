@@ -15,9 +15,11 @@ const LINKS = [
 ];
 
 /**
- * Full-screen navigation overlay. The Three.js companion lives behind the
- * links and only exists while the menu is open. Escape closes, focus is
- * trapped while open and returned to the opener on close.
+ * Full-screen navigation overlay (rev 25). The Three.js companion — the
+ * home star's dashed line-wireframe family as a near full-bleed background
+ * at both widths, its corners pulsing at random — lives behind the links
+ * and only exists while the menu is open. Escape closes, focus is trapped
+ * while open and returned to the opener on close.
  */
 export default function MenuOverlay({ open, onClose, onNavigate }) {
   const overlayRef = useRef(null);
